@@ -1,9 +1,9 @@
 @echo off
 
-rem STEP1:	goto 
-rem STEP2:	goto 
-rem STEP3:	goto 
-rem STEP4:	goto 
+rem STEP1:	set try=0, sn=0, cn=curlnumber
+rem STEP2:	:loopagain1 -> set sn+=1, if exist code%sn%.txt then copy [ImgNum1, _rand, ajaxCap] then del code%sn%.txt else goto :loopagain1
+rem STEP3:	:checktime -> check starttime then goto retry1
+rem STEP4:	goto  
 rem STEP5:	goto 
 rem STEP6:	goto 
 rem STEP7:	goto 
