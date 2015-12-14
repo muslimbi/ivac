@@ -23,7 +23,7 @@ set pia1=BGDD1
 
 
 rem aptdate=today+7days
-set aptdate=16/09/2015
+set aptdate=22/11/2015
 
 set /a try=0
 set /a sn=0
@@ -48,7 +48,7 @@ echo ###################### %sn% Current IP Address %_rand% code is %ImgNum1% aj
 :checktime 
 set startTime=%time%	
 SET /a ms=%RANDOM%*98/32768+1
-set endTime=11:46:07.%ms%	
+set endTime=11:50:12.%ms%	
 	
 echo startTime: %startTime%	
 echo endTime:   %endTime%	
@@ -126,7 +126,7 @@ color 02
 SET /a try+=1
 TITLE IVAC %fileno% STEP1 _ IP : %_rand% _ CN : %cn% _ SN:  %sn% _ TRY : %try%
 echo ###################### STEP ONE.ONE curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b cookie%sn%.txt -c cookie%sn%.txt --socks5 103.239.6.%_rand%:1020 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum1%&fileno=%fileno%&otp=&passport_no=%passport_no%&submit_btn=Generate%20OTP" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers2.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Login.jsp http://indianvisa-bangladesh.nic.in/visa/GenerateOTP.jsp -w "STEP ONE.ONE GenerateOTP Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b cookie%sn%.txt -c cookie%sn%.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum1%&fileno=%fileno%&otp=&passport_no=%passport_no%&submit_btn=Generate%20OTP" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers2.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Login.jsp http://indianvisa-bangladesh.nic.in/visa/GenerateOTP.jsp -w "STEP ONE.ONE GenerateOTP Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ********************** STEP ONE.ONE ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
@@ -213,7 +213,7 @@ color EC
 SET /a try+=1
 TITLE IVAC %fileno% STEP2 _ IP : %_rand% _ CN : %cn% _ SN:  %sn% _ TRY : %try%
 echo ###################### STEP TWO.TWO curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b cookie%sn%.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1020 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum2%&fileno=%fileno%&otp=%otp%&passport_no=%passport_no%&submit_btn=Submit" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ProcessApptPwd.jsp -w "STEP TWO.TWO ProcessApptPwd Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b cookie%sn%.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum2%&fileno=%fileno%&otp=%otp%&passport_no=%passport_no%&submit_btn=Submit" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ProcessApptPwd.jsp -w "STEP TWO.TWO ProcessApptPwd Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ********************** STEP TWO.TWO ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
@@ -267,7 +267,7 @@ color 21
 TITLE IVAC %fileno% STEP3 _ IP : %_rand% _ CN : %cn% _ TRY : %try%
 
 echo ###################### STEP THREE curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1020 --proxy-user danteproxy:dantepass --dump-header %fileno%-headers5.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Login.jsp http://indianvisa-bangladesh.nic.in/visa/Rimage.jsp -o %fileno%_QC3.jpg -w "STEP THREE CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass --dump-header %fileno%-headers5.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Login.jsp http://indianvisa-bangladesh.nic.in/visa/Rimage.jsp -o %fileno%_QC3.jpg -w "STEP THREE CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
 echo ********************** STEP THREE ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 
 rem set /a try +=1
@@ -296,7 +296,7 @@ set try=0
 :retry33
 color 2A
 echo ###################### STEP THREE.THREE curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1020 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum3%&birthdate=%birthdate%&fileno=%fileno%&passport_no=%passport_no%&pia=%pia1%&submit_btn=Submit" --dump-header %fileno%-headers6.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp -o %fileno%-ReprintAppt.txt -w "STEP THREE.THREE Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum3%&birthdate=%birthdate%&fileno=%fileno%&passport_no=%passport_no%&pia=%pia1%&submit_btn=Submit" --dump-header %fileno%-headers6.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp -o %fileno%-ReprintAppt.txt -w "STEP THREE.THREE Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ************************* STEP THREE.THREE ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
@@ -324,7 +324,7 @@ findstr /r "Appointment_Login" %fileno%-headers6.txt
 if /i %ERRORLEVEL% EQU 0 goto :loopagain1
 
 findstr /r "no_appointment_dates" %fileno%-headers6.txt
-if /i %ERRORLEVEL% EQU 0 goto EXIT
+if /i %ERRORLEVEL% EQU 0 goto :retry33
 
 
 
@@ -360,7 +360,7 @@ exit /b
 
 :captchaenable
 echo ************************* captcha enable on time %time% ************************* >> %fileno%-report.txt
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1020 --proxy-user danteproxy:dantepass -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers7.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp http://indianvisa-bangladesh.nic.in/captcha.gif -o %fileno%-captcha.gif -w "CAPTCHA ENABLED on %time% by %try% \n" 2>> %fileno%-report.txt
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers7.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp http://indianvisa-bangladesh.nic.in/captcha.gif -o %fileno%-captcha.gif -w "CAPTCHA ENABLED on %time% by %try% \n" 2>> %fileno%-report.txt
 echo ************************* captcha done on time %time% ************************* >> %fileno%-report.txt	
 
 rem set /a try +=1
@@ -377,7 +377,7 @@ echo ######################### ====== %code2% ====== #########################
 
 
 :captchacode
-c:\curl\curl%cn% -v --trace-time -i --retry 5 --retry-delay 1 -S -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1020 --proxy-user danteproxy:dantepass -H "Keep-Alive: 60" -H "Connection: keep-alive" -d "captcha_resp_txt=%code2%" --dump-header %fileno%-headers9.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/ http://indianvisa-bangladesh.nic.in/captcha_resp -o %fileno%-captcha.done -w "CAPTCHA DONE on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time -i --retry 5 --retry-delay 1 -S -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -H "Keep-Alive: 60" -H "Connection: keep-alive" -d "captcha_resp_txt=%code2%" --dump-header %fileno%-headers9.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/ http://indianvisa-bangladesh.nic.in/captcha_resp -o %fileno%-captcha.done -w "CAPTCHA DONE on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ************************* captcha code for captcha_resp on time %time% ************************* >> %fileno%-report.txt	
 
 rem set /a try +=1
@@ -406,7 +406,7 @@ TITLE IVAC %fileno% FINAL _ IP : %_rand% _ CN : %cn% _ TRY : %try%
 SET /a cn=%RANDOM%*8/32768
 echo curl version %cn%
 
-c:\curl\curl%cn% -v --trace-time -S --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1020 --proxy-user danteproxy:dantepass --dump-header %fileno%-headers11.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp http://indianvisa-bangladesh.nic.in/visa/Rimage.jsp -o %fileno%-captcha.jpg -w "STEP FINAL CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
+c:\curl\curl%cn% -v --trace-time -S --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass --dump-header %fileno%-headers11.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp http://indianvisa-bangladesh.nic.in/visa/Rimage.jsp -o %fileno%-captcha.jpg -w "STEP FINAL CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
 echo ********************** STEP FINAL ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 
 rem set /a try +=1
@@ -441,7 +441,7 @@ echo =================== IP:  %_rand% =================== Retry: %try% =========
 	
 echo curl version %cn%
 
-c:\curl\curl%cn%  -v --trace-time -S -m 8 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1020 --proxy-user danteproxy:dantepass -d "fileno=%fileno%&APPLNAME=%APPLNAME%&PIA=%pia%&next_page=Visa_print_Form2.jsp&DATE=%aptdate%&ImgNum=%ImgNum%&SAVE=Confirm+The+Appointment" --dump-header %fileno%-headers12.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp http://indianvisa-bangladesh.nic.in/visa/allotmentsave.jsp -o %fileno%-allotmentsave.txt 2>> %fileno%-report.txt	
+c:\curl\curl%cn%  -v --trace-time -S -m 8 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "fileno=%fileno%&APPLNAME=%APPLNAME%&PIA=%pia%&next_page=Visa_print_Form2.jsp&DATE=%aptdate%&ImgNum=%ImgNum%&SAVE=Confirm+The+Appointment" --dump-header %fileno%-headers12.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp http://indianvisa-bangladesh.nic.in/visa/allotmentsave.jsp -o %fileno%-allotmentsave.txt 2>> %fileno%-report.txt	
  
 rem set /a try +=1
 rem if /i %try% EQU 20 SET /a _rand=%RANDOM%*100/32768+151 & set try=0
