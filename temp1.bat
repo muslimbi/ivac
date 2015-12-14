@@ -325,7 +325,7 @@ if /i %ERRORLEVEL% EQU 0 goto :loopagain1
 
 findstr /r "no_appointment_dates" %fileno%-headers6.txt
 if /i %ERRORLEVEL% EQU 0 goto :retry33
-
+rem no_appointment_dates == goto EXIT
 
 
 :checkretry200
