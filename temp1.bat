@@ -22,6 +22,7 @@ set pia=BGDD
 set pia1=BGDD1
 
 
+
 rem aptdate=today+7days
 set aptdate=22/12/2015
 
@@ -213,7 +214,7 @@ color EC
 SET /a try+=1
 TITLE IVAC %fileno% STEP2 _ IP : %_rand% _ CN : %cn% _ SN:  %sn% _ TRY : %try%
 echo ###################### STEP TWO.TWO curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b cookie%sn%.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum2%&fileno=%fileno%&otp=%otp%&passport_no=%passport_no%&submit_btn=Submit" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ProcessApptPwd.jsp -w "STEP TWO.TWO ProcessApptPwd Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b cookie%sn%.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum2%&fileno=%fileno%&otp=%otp%&passport_no=%passport_no%&submit_btn=Submit" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ProcessApptPwd.jsp -o %fileno%-ProcessApptPwd.txt -w "STEP TWO.TWO ProcessApptPwd Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ********************** STEP TWO.TWO ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
@@ -297,7 +298,7 @@ set try=0
 :retry33
 color 2A
 echo ###################### STEP THREE.THREE curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum3%&birthdate=%birthdate%&fileno=%fileno%&passport_no=%passport_no%&pia=%pia1%&submit_btn=Submit" --dump-header %fileno%-headers6.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp -o %fileno%-ReprintAppt.txt -w "STEP THREE.THREE Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum3%&birthdate=%birthdate%&fileno=%fileno%&pia=%pia1%&submit_btn=Submit" --dump-header %fileno%-headers6.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/Appointment_Passport.jsp -o %fileno%-Appointment_Passport.txt -w "STEP THREE.THREE Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ************************* STEP THREE.THREE ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
@@ -330,16 +331,16 @@ rem no_appointment_dates == goto EXIT
 
 
 :checkretry200
-findstr /L /O /N /C:"The Problem may be due to 500 Server Error/404 Page Not Found.Please contact your system administrator" %fileno%-ReprintAppt.txt
+findstr /L /O /N /C:"The Problem may be due to 500 Server Error/404 Page Not Found.Please contact your system administrator" %fileno%-Appointment_Passport.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===The Problem may be due to 500 Server Error/404 Page Not Found.Please contact your system administrator=== & goto EXIT
 
-findstr /L /O /N /C:"New Appointment is possible only" %fileno%-ReprintAppt.txt
+findstr /L /O /N /C:"New Appointment is possible only" %fileno%-Appointment_Passport.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===New Appointment is possible only within 5 days of Registration's Date=== & goto EXIT
 
-findstr /L /O /N /C:"Appointment Date is already taken" %fileno%-ReprintAppt.txt
+findstr /L /O /N /C:"Appointment Date is already taken" %fileno%-Appointment_Passport.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Appointment Date is already taken=== & goto EXIT
 
-findstr /L /O /N /C:"Access code is not valid" %fileno%-ReprintAppt.txt
+findstr /L /O /N /C:"Access code is not valid" %fileno%-Appointment_Passport.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Access code is not valid=== & goto EXIT
 
 findstr /L /O /N /C:"Connection: Close" %fileno%-headers6.txt
@@ -391,7 +392,7 @@ set try=0
 :retry44
 color 2A
 echo ###################### STEP FOUR.FOUR curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum4%&birthdate=%birthdate%&fileno=%fileno%&passport_no=%passport_no%&pia=%pia1%&submit_btn=Submit" --dump-header %fileno%-headers8.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp -o %fileno%-ReprintAppt.txt -w "STEP FOUR.FOUR Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum4%&&fileno=%fileno%&passport_no=%passport_no%&submit_btn=Submit" --dump-header %fileno%-headers8.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Passport.jsp http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp -o %fileno%-ReprintAppt.txt -w "STEP FOUR.FOUR Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ************************* STEP FOUR.FOUR ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
@@ -419,8 +420,8 @@ findstr /r "Appointment_Login" %fileno%-headers8.txt
 if /i %ERRORLEVEL% EQU 0 goto :loopagain1
 
 findstr /r "no_appointment_dates" %fileno%-headers8.txt
-if /i %ERRORLEVEL% EQU 0 goto :retry44
-rem no_appointment_dates == goto EXIT
+if /i %ERRORLEVEL% EQU 0 goto :EXIT
+rem no_appointment_dates == goto EXIT	retry44
 
 
 :checkretry200
