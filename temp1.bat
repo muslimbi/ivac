@@ -17,13 +17,13 @@ set fileno=BGDC77749515
 set APPLNAME=MD+SAIFUL
 set birthdate=20/04/1983
 set passport_no=BB0008360
-set aptdate=25/08/2015
+set aptdate=22/12/2015
 set pia=BGDD
 set pia1=BGDD1
 
 
 rem aptdate=today+7days
-set aptdate=22/11/2015
+set aptdate=22/12/2015
 
 set /a try=0
 set /a sn=0
@@ -48,7 +48,7 @@ echo ###################### %sn% Current IP Address %_rand% code is %ImgNum1% aj
 :checktime 
 set startTime=%time%	
 SET /a ms=%RANDOM%*98/32768+1
-set endTime=11:50:12.%ms%	
+set endTime=11:51:55.%ms%	
 	
 echo startTime: %startTime%	
 echo endTime:   %endTime%	
@@ -63,7 +63,7 @@ set /a ets=1%endTime:~6,2% - 100
 	
 set /a lth=0	
 set /a ltm=0	
-set /a lts=0
+set /a lts=0	
 	
 :CHECK_SEC	
 if /i %ets% LSS %sts% goto ROLL_MIN	
@@ -262,6 +262,7 @@ if /i %ERRORLEVEL% EQU 0 goto :retry3
 
 
 
+
 :retry3
 color 21 
 TITLE IVAC %fileno% STEP3 _ IP : %_rand% _ CN : %cn% _ TRY : %try%
@@ -325,6 +326,100 @@ if /i %ERRORLEVEL% EQU 0 goto :loopagain1
 
 findstr /r "no_appointment_dates" %fileno%-headers6.txt
 if /i %ERRORLEVEL% EQU 0 goto :retry33
+rem no_appointment_dates == goto EXIT
+
+
+:checkretry200
+findstr /L /O /N /C:"The Problem may be due to 500 Server Error/404 Page Not Found.Please contact your system administrator" %fileno%-ReprintAppt.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===The Problem may be due to 500 Server Error/404 Page Not Found.Please contact your system administrator=== & goto EXIT
+
+findstr /L /O /N /C:"New Appointment is possible only" %fileno%-ReprintAppt.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===New Appointment is possible only within 5 days of Registration's Date=== & goto EXIT
+
+findstr /L /O /N /C:"Appointment Date is already taken" %fileno%-ReprintAppt.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Appointment Date is already taken=== & goto EXIT
+
+findstr /L /O /N /C:"Access code is not valid" %fileno%-ReprintAppt.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Access code is not valid=== & goto EXIT
+
+findstr /L /O /N /C:"Connection: Close" %fileno%-headers6.txt
+if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto :retry33
+
+findstr /r "Transfer-Encoding: chunked" %fileno%-headers6.txt
+if /i %ERRORLEVEL% EQU 0 goto retry4
+
+
+===============================================================================================================================================
+===============================================================================================================================================
+===============================================================================================================================================
+===============================================================================================================================================
+
+
+
+
+:retry4
+color 21 
+TITLE IVAC %fileno% STEP4 _ IP : %_rand% _ CN : %cn% _ TRY : %try%
+
+echo ###################### STEP FOUR curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass --dump-header %fileno%-headers7.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Login.jsp http://indianvisa-bangladesh.nic.in/visa/Rimage.jsp -o %fileno%_QC4.jpg -w "STEP THREE CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
+echo ********************** STEP FOUR ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
+
+rem set /a try +=1
+rem if /i %try% EQU 20 SET /a _rand=%RANDOM%*100/32768+151 & set try=0
+
+findstr /L /O /N /C:"Content-Type: text/html" %fileno%-headers7.txt
+if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto :retry4 
+
+findstr /L /O /N /C:"Content-Type: image/jpeg" %fileno%-headers7.txt
+if /i %ERRORLEVEL% EQU 0 echo **********************   Error Level is %ERRORLEVEL% for ===STEP FOUR=== & goto :captchaAnswer4 
+
+echo ********************** SERVER BUSY === Retry Again ===STEP FOUR=== >> %fileno%-report.txt
+goto :retry4
+echo ************************* Technical Problem ***************************** >> %fileno%-report.txt	
+
+
+:captchaAnswer4
+color 29
+echo ####### Start QC4 on time %time% ####### %ImgNum1% ####### %ImgNum2% ####### %ImgNum3% ####### %ImgNum4% ####### >> %fileno%-report.txt
+c:\curl\curl -S -F "source_url=" -F "captcha_platform=" -F "action=Submit" -F "file=@%fileno%_QC4.jpg" http://103.239.6.140/gsa_test.gsa -o %fileno%-code.txt
+FOR /F "tokens=11 delims=<\/>" %%k IN (%fileno%-code.txt) DO SET ImgNum4=%%k
+echo ####### End QC4 on time %time% ####### %ImgNum1% ####### %ImgNum2% ####### %ImgNum3% ####### %ImgNum4% ####### >> %fileno%-report.txt
+
+set try=0
+
+:retry44
+color 2A
+echo ###################### STEP FOUR.FOUR curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass -d "ImgNum=%ImgNum4%&birthdate=%birthdate%&fileno=%fileno%&passport_no=%passport_no%&pia=%pia1%&submit_btn=Submit" --dump-header %fileno%-headers8.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Appointment_Home.jsp http://indianvisa-bangladesh.nic.in/visa/ReprintAppt.jsp -o %fileno%-ReprintAppt.txt -w "STEP FOUR.FOUR Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+echo ************************* STEP FOUR.FOUR ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
+echo *********************************************************************************************** >> %fileno%-report.txt	
+
+rem set /a try +=1
+rem if /i %try% EQU 20 SET /a _rand=%RANDOM%*100/32768+151 & set try=0
+
+findstr /L /O /N /C:"HTTP/1.1 200 OK" %fileno%-headers8.txt
+if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL% for 200===Appointment_Home=== & goto :checkretry200 
+
+findstr /L /O /N /C:"HTTP/1.1 302 Moved Temporarily" %fileno%-headers8.txt
+if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL% for 302===Appointment_Home=== & goto :checkretry302 
+
+echo ********************** SERVER BUSY === Retry Again ===STEP FOUR.FOUR=== >> %fileno%-report.txt
+goto :retry44
+
+
+:checkretry302
+findstr /L /O /N /C:"Invalid Captcha" %fileno%-headers8.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Invalid Answer=== & del %fileno%_QC4.jpg & goto :loopagain1 
+
+findstr /L /O /N /C:"Your OTP is expired" %fileno%-headers6.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Invalid Answer=== & goto :loopagain1 
+
+findstr /r "Appointment_Login" %fileno%-headers8.txt
+if /i %ERRORLEVEL% EQU 0 goto :loopagain1
+
+findstr /r "no_appointment_dates" %fileno%-headers8.txt
+if /i %ERRORLEVEL% EQU 0 goto :retry44
 rem no_appointment_dates == goto EXIT
 
 
