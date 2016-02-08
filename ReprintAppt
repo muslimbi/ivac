@@ -25,8 +25,8 @@
     <body onLoad="backButtonOverride()">
         <FORM name="OnlineForm" action="allotmentsave.jsp" method="post" onSubmit="return checkalert();">
             <p>
-                <input type=hidden value=BGDR04198716 name=fileno>
-                <input type=hidden value=MST SHAHNAZ name=APPLNAME>
+                <input type=hidden value=BGDR04035016 name=fileno>
+                <input type=hidden value=POUSH name=APPLNAME>
                 <input type=hidden value=BGDR name=PIA>
                 <input type=hidden value=Visa_print_Form2.jsp name=next_page>
             </p>
@@ -49,11 +49,11 @@
                     <td  colspan="4" class="red_heading text_bold text_right"> 
                         Applicant Name :
                     </td>
-                    <td> <b class="style13">&nbsp;MST SHAHNAZ</b></td>
+                    <td> <b class="style13">&nbsp;POUSH</b></td>
                 </tr>
                 <tr>
                     <td  colspan="4" class="red_heading text_bold text_right">  Application Id :</td>
-                    <td>BGDR04198716</td>
+                    <td>BGDR04035016</td>
                 </tr>
                 <tr> 
                     <td height="21" colspan="5">&nbsp;</td>
@@ -95,7 +95,7 @@
                             <font color="#990000">
                             <select name="DATE" size="1" >
                                 <option value="">Select</option>
-                                null<option value="17/02/2016" title="17/02/2016"> 17/02/2016</option>
+                                null<option value="18/02/2016" title="18/02/2016"> 18/02/2016</option>
                             </select>
                             </font> 
                             </font>
