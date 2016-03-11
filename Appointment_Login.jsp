@@ -130,26 +130,26 @@
                         <tr>
                             <td>
                                 <div class="cl">
-                                    Father's Name
+                                    Applicant's Given Name
                                 </div></td>
                             <td>
-                                <input name="874116"  type="text" class="textBoxDashed app_field"  size="20" maxlength="50"  onKeyUp="chkString(this)" onBlur='trim1(this);'/>
+                                <input name="763506"  type="text" class="textBoxDashed app_field"  size="20" maxlength="50"  onKeyUp="chkString(this)" onBlur='trim1(this);'/>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <div class="cl">
-                                    Birth Place
+                                    Father's Name
                                 </div></td>
                             <td>
-                                <input name="205329"  type="text" class="textBoxDashed app_field"  size="20" maxlength="50"  onKeyUp="chkString(this)" onBlur='trim1(this);'/>
+                                <input name="465398"  type="text" class="textBoxDashed app_field"  size="20" maxlength="50"  onKeyUp="chkString(this)" onBlur='trim1(this);'/>
                             </td>
                         </tr>
                         <tr>
                             <td><div class="cl">OTP</div></td>
                             <td>
-                                <input name="otp" type="password" title="Please Enter your otp" class="textBoxDashed"  id="otp" size="20" maxlength="6"  onKeyUp="chkAlphaNum(this);
-                                       disable_enable_btn()" onBlur='trim1(this);'/>
+                                   <input name="otp" type="password" title="Please Enter your otp" class="textBoxDashed"  id="otp" size="20" maxlength="6"  onKeyUp="chkAlphaNum(this);
+                                    disable_enable_btn()" onBlur='trim1(this);'/>
                             </td>
                         </tr>
                         <tr>
