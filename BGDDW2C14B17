@@ -26,6 +26,7 @@ echo ++++ today ========== %today% ++++ apptdate ======= %aptdate%
 echo ##################################################################
 echo ##################################################################
 
+
 :StartBegin
 rem start begin from Appointment_Passport302
 SET /a try=0
@@ -136,7 +137,7 @@ TITLE IVAC %~n0  ##   STEP1 _ Load_Get_Appointment _ CN : %cn% _ RN:  %rn% _ TRY
 SET /a try+=1
 if /i %try% GTR 3 SET /a _rand=%RANDOM%*100/32768+151 & set /a try=0 & SET socks5=--socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass
 
-c:\curl\curl%cn% -v --trace-time -S -d -e --connect-timeout 4 -m 7 -b otpcookie%rn%.txt -c %fileno%_cookie.txt -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-Appointment_headers1.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/index.html http://indianvisa-bangladesh.nic.in/visa/Get_Appointment -L -o %fileno%-Appointment_Login1.txt -w "STEP ONE.ONE Appointment_Login OTP Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time -S -d -e --connect-timeout 4 -m 7 -b otpcookie%rn%.txt -c %fileno%_cookie.txt -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-Appointment_headers1.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/index.html http://indianvisa-bangladesh.nic.in/visa/Get_Appointment -L -o %fileno%-Get_Appointment.txt -w "STEP ONE.ONE Appointment_Login OTP Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 
 findstr /L /O /N /C:"HTTP/1.1 200 OK" %fileno%-Appointment_headers1.txt
 if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL% for 200===Begin_Get_Appointment=== & goto Load_Get_Appointment200 
@@ -153,10 +154,10 @@ goto Load_Get_Appointment
 echo ****************** Technical Problem at Line Number 175 ****************** >> %fileno%-report.txt	
 
 :Load_Get_Appointment200
-findstr /L /O /N /C:"The Problem may be due to 500 Server Error/404 Page Not Found" %fileno%-Appointment_Login1.txt
+findstr /L /O /N /C:"The Problem may be due to 500 Server Error/404 Page Not Found" %fileno%-Get_Appointment.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===500 Server Error/404 Page Not Found=== & goto Load_Get_Appointment
 
-findstr /L /O /N /C:"Appointment not started.Please try again after some time" %fileno%-Appointment_Login1.txt
+findstr /L /O /N /C:"Appointment not started.Please try again after some time" %fileno%-Get_Appointment.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===OTP can be generated only after appointment time starts=== & timeout 2 & goto checktime
 
 findstr /L /O /N /C:"Connection: Close" %fileno%-Appointment_headers1.txt
@@ -164,7 +165,7 @@ if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto Load_Get_Appointment
 
 rem extract Appointment_Login 
 @echo off & setlocal EnableDelayedExpansion
-for /F "delims=" %%j in ('type "%fileno%-Appointment_Login1.txt"') do (
+for /F "delims=" %%j in ('type "%fileno%-Get_Appointment.txt"') do (
   set /A counter+=1
   if !counter! equ 121 (echo.%%j> "%fileno%-Appointment_firstvar1.txt")
   if !counter! equ 122 (echo.%%j>> "%fileno%-Appointment_firstvar1.txt")
@@ -246,8 +247,8 @@ if /i %filesize% EQU 1312 SET secondvalue=%birthplace%& SET filecontent="Place o
 echo file size is %filesize% and file content is %filecontent%
 
 
-:Load_captcha
-TITLE IVAC %~n0  ##   STEP1 _ Load_captcha _ CN : %cn% _ RN:  %rn% _ TRY : %try%
+:Load_Get_Appointment_captcha
+TITLE IVAC %~n0  ##   STEP1 _ Load_Get_Appointment_captcha _ CN : %cn% _ RN:  %rn% _ TRY : %try%
 if /i %cap% EQU 4 SET ImgNum2=& goto curl_have_otp
 color A9 
 TITLE IVAC %~n0  ##   OTPCAPTCHA _  OTP= %otp% _ Time= %otptime% _ TRY : %try% _ IP : %_rand% _ CN : %cn%
@@ -257,35 +258,35 @@ if /i %try% GTR 3 SET /a _rand=%RANDOM%*100/32768+151 & set /a try=0 & SET socks
 SET /a cn=%RANDOM%*8/32768
 echo curl version %cn%
 
-c:\curl\curl%cn% -v --trace-time -S -d -e --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --dump-header %fileno%-captcha_headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/captcha -o %fileno%-captcha.jpg -w "STEP OTPCAPTCHA CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
+c:\curl\curl%cn% -v --trace-time -S -d -e --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --dump-header %fileno%-captcha_headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/captcha -o %fileno%-Appointment_captcha.jpg -w "STEP APPOINTMENT CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
 
-if not exist "%fileno%-captcha.jpg" goto Load_captcha
+if not exist "%fileno%-Appointment_captcha.jpg" goto Load_Get_Appointment_captcha
 
 echo ********************** STEP OTPCAPTCHA ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 
 findstr /L /O /N /C:"Content-Type: text/html" %fileno%-captcha_headers4.txt
-if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto Load_captcha 
+if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto Load_Get_Appointment_captcha 
 
 findstr /L /O /N /C:"Content-Type: image/jpeg" %fileno%-captcha_headers4.txt
 if /i %ERRORLEVEL% EQU 0 echo **********************   Error Level is %ERRORLEVEL% for ===STEP OTPCAPTCHA=== & goto retriveotpcode 
 
 echo ********************** SERVER BUSY === Retry Again ===STEP OTPCAPTCHA=== >> %fileno%-report.txt
-goto Load_captcha
+goto Load_Get_Appointment_captcha
 
 :retriveotpcode 
 color A4
 echo ####### Start FC on time %time% ####### %ImgNum1% ####### %ImgNum2% ####### %ImgNum3% ####### %ImgNum% ####### >> %fileno%-report.txt
-c:\curl\curl -S -F "source_url=" -F "captcha_platform=" -F "action=Submit" -F "file=@%fileno%-captcha.jpg" http://122.144.12.253:8181/gsa_test.gsa -o %fileno%-code.txt
-FOR /F "tokens=11 delims=<\/>" %%m IN (%fileno%-code.txt) DO del %fileno%-captcha.jpg & SET captcha=%%m
+c:\curl\curl -S -F "source_url=" -F "captcha_platform=" -F "action=Submit" -F "file=@%fileno%-Appointment_captcha.jpg" http://122.144.12.253:8181/gsa_test.gsa -o %fileno%-code.txt
+FOR /F "tokens=11 delims=<\/>" %%m IN (%fileno%-code.txt) DO del %fileno%-Appointment_captcha.jpg & SET appointmentcaptcha=%%m
 echo ####### End FC on time %time% ####### %ImgNum1% ####### %ImgNum2% ####### %ImgNum3% ####### %ImgNum% ####### >> %fileno%-report.txt
 
-set /p captcha=Please Enter Captcha Value
+set /p appointmentcaptcha=Please Enter Appointment Captcha Value
 
 echo First Variable = "%firstvar%" & echo First Variable = "%firstvar%" >> %fileno%-report.txt
 echo First Value = "%firstvalue%" & echo First Value = "%firstvalue%" >> %fileno%-report.txt
 echo Second Variable = "%secondvar%" & echo Second Variable = "%secondvar%" >> %fileno%-report.txt
 echo Second Value = "%secondvalue%" &echo Second Value = "%secondvalue%" >> %fileno%-report.txt
-echo captcha Value = "%captcha%" & echo captcha Value = "%captcha%" >> %fileno%-report.txt
+echo Appointment_captcha Value = "%appointmentcaptcha%" & echo Appointment_captcha Value = "%appointmentcaptcha%" >> %fileno%-report.txt
 echo Token Value = "%tokenvar%" & echo Token Value = "%tokenvar%" >> %fileno%-report.txt
 
 set try=0
@@ -313,12 +314,12 @@ goto Begin_have_otp
 
 :curlGenerateOTP
 TITLE IVAC %~n0  ##   STEP3 _ curlGenerateOTP _ CN : %cn% _ RN:  %rn% _ TRY : %try%
+echo ###################### STEP TWO.ONE curl version %cn% _ time %time% _ RN:  %rn% _  TRY : %try% ################## >> %fileno%-report.txt
 SET /a try+=1
 if /i %try% GTR 3 SET /a _rand=%RANDOM%*100/32768+151 & set /a try=0 & SET socks5=--socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass
-echo ###################### STEP ONE.ONE curl version %cn% _ time %time% _ RN:  %rn% _  TRY : %try% ################## >> %fileno%-report.txt
 
-c:\curl\curl%cn% -v --trace-time -S -d -e --connect-timeout 4 -m 6 -b %fileno%_cookie.txt -c %fileno%_cookie.txt -d "filerfno=%fileno%&passport_number=%passport_no%&value1=%firstvalue%&value2=%secondvalue%&otp_required=generate_otp&otp=&captcha=%captcha%" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers3.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/json/GenerateOtp -L -o %fileno%-GenerateOTP.txt -w "STEP ONE.ONE GenerateOTP Processing on %time% by %try% \n" 2>> %fileno%-report.txt
-echo ********************** STEP ONE.ONE ****** Done by IP %_rand% _ time %time% _ RN:  %rn% _  TRY : %try% ************************* >> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time -S -d -e --connect-timeout 4 -m 6 -b %fileno%_cookie.txt -c %fileno%_cookie.txt -d "filerfno=%fileno%&passport_number=%passport_no%&value1=%firstvalue%&value2=%secondvalue%&otp_required=generate_otp&otp=&captcha=%appointmentcaptcha%" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers3.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/json/GenerateOtp -L -o %fileno%-GenerateOTP.txt -w "STEP TWO.ONE GenerateOTP Processing on %time% by %try% \n" 2>> %fileno%-report.txt
+echo ********************** STEP TWO.ONE ****** Done by IP %_rand% _ time %time% _ RN:  %rn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt
 
 findstr /L /O /N /C:"HTTP/1.1 200 OK" %fileno%-headers3.txt
@@ -333,12 +334,15 @@ if /i %ERRORLEVEL% EQU 0 goto curlGenerateOTP
 findstr /L /O /N /C:"HTTP/1.1 302 Moved Temporarily" %fileno%-headers3.txt
 if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL% for 302===GenerateOTP=== & goto GenerateOTP302 
 
-echo ********************** SERVER BUSY === Retry Again ===STEP ONE.ONE=== >> %fileno%-report.txt
+echo ********************** SERVER BUSY === Retry Again ===STEP TWO.ONE=== >> %fileno%-report.txt
 if /i %try% EQU 200 set try=0 & goto Load_Get_Appointment
 goto curlGenerateOTP
 echo ****************** Technical Problem at Line Number 305 ****************** >> %fileno%-report.txt	
 
 :GenerateOTP200
+findstr /L /O /N /C:"Content-Type: application/json" %fileno%-headers3.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===500 Server Error/404 Page Not Found=== & goto GenerateOTPEND
+
 findstr /L /O /N /C:"The Problem may be due to 500 Server Error/404 Page Not Found" %fileno%-GenerateOTP.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===500 Server Error/404 Page Not Found=== & goto curlGenerateOTP
 
@@ -367,6 +371,8 @@ if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===OTP ca
 findstr /L /O /N /C:"Invalid filenumber or OTP or Appointment Already taken" %fileno%-GenerateOTP.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Invalid filenumber or OTP=== & color 0F & timeout 5 & goto Load_Get_Appointment
 
+:GenerateOTPEND
+
 findstr /r "%fileno%" %fileno%-GenerateOTP.txt>%fileno%-headers3-temp.txt
 echo ********************** Error Level is %ERRORLEVEL% in Generated OTP >> %fileno%-report.txt
 if /i %ERRORLEVEL% EQU 1 goto Load_Get_Appointment  
@@ -385,9 +391,9 @@ echo ********** Time= %otptime% ********** OTP= "%otp%" **********
 c:\curl\curl%cn% --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" http://muslimbi.com/ivac/otp/difftime.php?fileno=%fileno% -o %fileno%-difftime.txt -w "Check difftime Save Status \n"
 IF EXIST "%fileno%-difftime.txt" FOR /F %%d IN (%fileno%-difftime.txt) DO SET difftime=%%d
 echo ********** Time= %otptime% ###################### OTP= %otp% ********** >> %fileno%-report.txt	
-echo ###################### STEP ONE *END* *END* *END* *END* ###################### >> %fileno%-report.txt
-echo ###################### STEP ONE *END* *END* *END* *END* ###################### >> %fileno%-report.txt
-echo ###################### STEP ONE *END* *END* *END* *END* ###################### >> %fileno%-report.txt
+echo ###################### STEP TWO *END* *END* *END* *END* ###################### >> %fileno%-report.txt
+echo ###################### STEP TWO *END* *END* *END* *END* ###################### >> %fileno%-report.txt
+echo ###################### STEP TWO *END* *END* *END* *END* ###################### >> %fileno%-report.txt
 echo.>> %fileno%-report.txt
 echo.>> %fileno%-report.txt
 echo.>> %fileno%-report.txt
@@ -402,6 +408,7 @@ rem END curlGenerateOTP
 =====================================================================================
 :curl_send_alotment_sms
 TITLE IVAC %~n0  ##   STEP4 _ curl_send_alotment_sms _ CN : %cn% _ RN:  %rn% _ TRY : %try%
+echo ###################### STEP TWO.TWO curl version %cn% _ time %time% _ RN:  %rn% _  TRY : %try% ################## >> %fileno%-report.txt
 color EC
 SET /a try+=1
 if /i %try% GTR 3 SET /a _rand=%RANDOM%*100/32768+151 & set /a try=0 & SET socks5=--socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass
@@ -409,12 +416,25 @@ if /i %try% GTR 3 SET /a _rand=%RANDOM%*100/32768+151 & set /a try=0 & SET socks
 
 TITLE IVAC %~n0  ##   STEP2 _  OTP= %otp% _ Time= %time% _ TRY : %try% _ IP : %_rand% _ CN : %cn%
 echo ###################### STEP TWO.TWO curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S -d -e --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt -d "otp_required=send_alotment_sms&filerfno=%fileno%&passport_no=%passport_no%&%firstvar%=%firstvalue%&%secondvar%=%secondvalue%&otp=%otp%&captcha=%captcha%&submit_btn=Send+Allotment+SMS&token=%tokenvar%" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/Get_Appointment -o %fileno%-send_alotment_sms.txt -w "STEP TWO.TWO send_alotment_sms Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S -d -e --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt -d "otp_required=send_alotment_sms&filerfno=%fileno%&passport_no=%passport_no%&%firstvar%=%firstvalue%&%secondvar%=%secondvalue%&otp=%otp%&captcha=%appointmentcaptcha%&submit_btn=Send+Allotment+SMS&token=%tokenvar%" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/Get_Appointment -L -o %fileno%-send_alotment_sms.txt -w "STEP TWO.TWO send_alotment_sms Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ********************** STEP TWO.TWO ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
 
+findstr /L /O /N /C:"Invalid filenumber or passport number or Appointment not taken" %fileno%-send_alotment_sms.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===200Invalid filenumber or passport number or Appointment not taken=== & goto curlGenerateOTP 
 
+
+
+
+
+=====================================================================================
+=====================================================================================
+=====================================================================================
+=====================================================================================
+:getFilesize
+set filesize=%~z1
+exit /b
 =====================================================================================
 =====================================================================================
 =====================================================================================
@@ -422,7 +442,7 @@ echo ***************************************************************************
 :Begin_have_otp
 TITLE IVAC %~n0  ##   STEP4 _ Begin_have_otp _ CN : %cn% _ RN:  %rn% _ TRY : %try%
 echo ###################### STEP PROCESSHAVEOTP *BEGIN* *START* ###################### >> %fileno%-report.txt	
-echo ###################### STEP TWO TWO TWO *BEGIN* *START* ###################### >> %fileno%-report.txt	
+echo ###################### STEP TWO THREE *BEGIN* *START* ###################### >> %fileno%-report.txt	
 echo ###################### STEP PROCESSHAVEOTP *BEGIN* *START* ###################### >> %fileno%-report.txt	
 set /a try=0
 set /a sn=0
@@ -443,9 +463,9 @@ if /i %try% GTR 3 SET /a _rand=%RANDOM%*100/32768+151 & set /a try=0 & SET socks
 
 
 TITLE IVAC %~n0  ##   STEP4 _ Begin_have_otp _ OTP= %otp% _ Time= %time% _ TRY : %try% _ IP : %_rand% _ CN : %cn%
-echo ###################### STEP TWO.TWO curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S -d -e --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt -d "otp_required=HAVE_OTP&filerfno=%fileno%&passport_no=%passport_no%&%firstvar%=%firstvalue%&%secondvar%=%secondvalue%&otp=%otp%&captcha=%captcha%&submit_btn=Submit&token=%tokenvar%" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers5.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/Get_Appointment -o %fileno%-Processhaveotp.txt -w "STEP TWO.TWO PROCESSHAVEOTP Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
-echo ********************** STEP TWO.TWO ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
+echo ###################### STEP TWO.THREE curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S -d -e --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt -d "otp_required=HAVE_OTP&filerfno=%fileno%&passport_no=%passport_no%&%firstvar%=%firstvalue%&%secondvar%=%secondvalue%&otp=%otp%&captcha=%appointmentcaptcha%&submit_btn=Submit&token=%tokenvar%" -H "Keep-Alive: 60" -H "Connection: keep-alive" --dump-header %fileno%-headers5.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/Get_Appointment -L -o %fileno%-Processhaveotp.txt -w "STEP TWO.THREE PROCESSHAVEOTP Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+echo ********************** STEP TWO.THREE ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
 findstr /L /O /N /C:"HTTP/1.1 200 OK" %fileno%-headers5.txt
@@ -454,7 +474,7 @@ if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL%
 findstr /L /O /N /C:"HTTP/1.1 302 Moved Temporarily" %fileno%-headers5.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Captcha OK=== & goto Processhaveotp302 
 
-echo ********************** SERVER BUSY === Retry Again ===STEP TWO.TWO=== >> %fileno%-report.txt
+echo ********************** SERVER BUSY === Retry Again ===STEP TWO.THREE=== >> %fileno%-report.txt
 if /i %try% EQU 20 set try=0 & goto Processhaveotp
 goto curl_have_otp
 echo ************************* Technical Problem ***************************** >> %fileno%-report.txt	
@@ -463,7 +483,7 @@ echo ************************* Technical Problem ***************************** >
 findstr /L /O /N /C:"Invalid Answer" %fileno%-Processhaveotp.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for Invalid Answer & goto Processhaveotp 
 
-findstr /L /O /N /C:"Invalid filenumber or OTP or Appointment Already taken" %fileno%-Processhaveotp.txt
+findstr /L /O /N /C:"No appointment dates are available.Please contact respective mission" %fileno%-Processhaveotp.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for Please generate OTP & goto EXIT 
 
 findstr /L /O /N /C:"Your OTP is expired" %fileno%-Processhaveotp.txt
@@ -492,9 +512,6 @@ if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for Invalid A
 findstr /L /O /N /C:"Please generate OTP" %fileno%-headers5.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for Please generate OTP & goto Load_Get_Appointment 
 
-findstr /L /O /N /C:"Invalid filenumber or OTP or Appointment Already taken" %fileno%-headers5.txt
-if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for Please generate OTP & goto EXIT 
-
 findstr /L /O /N /C:"Your OTP is expired" %fileno%-headers5.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for Please generate OTP & goto Load_Get_Appointment 
 
@@ -511,33 +528,33 @@ echo.>> %fileno%-report.txt
 echo.>> %fileno%-report.txt	
 
 set /a try=0
-if /i %ERRORLEVEL% EQU 0 goto final
+if /i %ERRORLEVEL% EQU 0 goto Load_Allotment
 =====================================================================================
 =====================================================================================
 =====================================================================================
 =====================================================================================
-:ReprintAppt
+:Load_Allotment
 color 21 
-TITLE IVAC %fileno% STEP4_REPRINTAPPT _  OTP= %otp% _ Time= %otptime% _ TRY : %try% _ IP : %_rand% _ CN : %cn%
+TITLE IVAC %fileno% STEP4_Allotment _  OTP= %otp% _ Time= %otptime% _ TRY : %try% _ IP : %_rand% _ CN : %cn%
 SET /a try+=1
 if /i %try% GTR 3 SET /a _rand=%RANDOM%*100/32768+151 & set /a try=0 & SET socks5=--socks5 103.239.6.%_rand%:1080 --proxy-user danteproxy:dantepass
 
 echo ###################### STEP FOUR.FOUR curl version %cn% IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ################## >> %fileno%-report.txt	
-c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S -d -e --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt -d "ImgNum=%ImgNum2%&fileno=%fileno%&passport_no=%passport_no%&submit_btn=Submit" --dump-header %fileno%-headers8.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/Allotment -o %fileno%-ReprintAppt.txt -w "STEP FOUR.FOUR Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
+c:\curl\curl%cn% -v --trace-time --retry 5 --retry-delay 1 -S -d -e --connect-timeout 3 -m 15 -b %fileno%_cookie.txt -c %fileno%_cookie.txt -d "ImgNum=%ImgNum2%&fileno=%fileno%&passport_no=%passport_no%&submit_btn=Submit" --dump-header %fileno%-headers8.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/Allotment -L -o %fileno%-Allotment.txt -w "STEP FOUR.FOUR Appointment_Home Processing on %time% by %try% \n" 2>> %fileno%-report.txt	
 echo ************************* STEP FOUR.FOUR ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 echo *********************************************************************************************** >> %fileno%-report.txt	
 
 findstr /L /O /N /C:"HTTP/1.1 200 OK" %fileno%-headers8.txt
-if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL% for 200===Appointment_Home=== & goto ReprintAppt200 
+if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL% for 200===Appointment_Home=== & goto Allotment200 
 
 findstr /L /O /N /C:"HTTP/1.1 302 Moved Temporarily" %fileno%-headers8.txt
-if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL% for 302===Appointment_Home=== & goto ReprintAppt302 
+if /i %ERRORLEVEL% EQU 0 echo ********************** Error Level is %ERRORLEVEL% for 302===Appointment_Home=== & goto Allotment302 
 
 echo ********************** SERVER BUSY === Retry Again ===STEP FOUR.FOUR=== >> %fileno%-report.txt
-goto ReprintAppt
+goto Load_Allotment
 
 
-:ReprintAppt302
+:Allotment302
 findstr /L /O /N /C:"Invalid Captcha" %fileno%-headers8.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Invalid Answer=== & goto Processhaveotp 
 
@@ -552,42 +569,42 @@ if /i %ERRORLEVEL% EQU 0 goto Load_Get_Appointment
 
 findstr /r "no_appointment_dates" %fileno%-headers8.txt
 if /i %ERRORLEVEL% EQU 0 goto EXIT
-rem no_appointment_dates == goto EXIT	ReprintAppt
+rem no_appointment_dates == goto EXIT	Load_Allotment
 
 
-:ReprintAppt200
-findstr /L /O /N /C:"New Appointment is possible only" %fileno%-ReprintAppt.txt
+:Allotment200
+findstr /L /O /N /C:"New Appointment is possible only" %fileno%-Allotment.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===New Appointment is possible only within 5 days of Registration's Date=== & goto EXIT
 
-findstr /L /O /N /C:"Appointment Date is already taken" %fileno%-ReprintAppt.txt
+findstr /L /O /N /C:"Appointment Date is already taken" %fileno%-Allotment.txt
 if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Appointment Date is already taken=== & goto EXIT
 
-findstr /L /O /N /C:"Access code is not valid" %fileno%-ReprintAppt.txt
-if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Access code is not valid=== & goto reprintappt_captcha
+findstr /L /O /N /C:"Access code is not valid" %fileno%-Allotment.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===Access code is not valid=== & goto Allotment_captcha
 
-findstr /L /O /N /C:"The Problem may be due to 500 Server Error/404 Page Not Found.Please contact your system administrator" %fileno%-ReprintAppt.txt
-if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===The Problem may be due to 500 Server Error/404 Page Not Found.=== & goto ReprintAppt
+findstr /L /O /N /C:"The Problem may be due to 500 Server Error/404 Page Not Found.Please contact your system administrator" %fileno%-Allotment.txt
+if /i %ERRORLEVEL% EQU 0 echo ======   Error Level is %ERRORLEVEL% for ===The Problem may be due to 500 Server Error/404 Page Not Found.=== & goto Load_Allotment
 
 findstr /L /O /N /C:"Connection: Close" %fileno%-headers8.txt
-if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto ReprintAppt
+if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto Load_Allotment
 
 findstr /r "Transfer-Encoding: chunked" %fileno%-headers8.txt
-if /i %ERRORLEVEL% EQU 0 set try=0 & goto RetriveReprintAppt
+if /i %ERRORLEVEL% EQU 0 set try=0 & goto RetriveAllotment
 
 
 =============================================================================================
-:RetriveReprintAppt
-findstr /c:"select name" %fileno%-ReprintAppt.txt > %fileno%-datevar.txt
+:RetriveAllotment
+findstr /c:"select name" %fileno%-Allotment.txt > %fileno%-datevar.txt
 FOR /F "usebackq tokens=2" %%m IN (%fileno%-datevar.txt) DO SET datevar=%%m
 set datevar=%datevar:~6,6%
 echo %datevar%| findstr /r "^[0-9]*$"
-if errorlevel 1 echo "Date Variable NOT Number" & start %fileno%-ReprintAppt.txt & set /p datevar=Enter Date Variable
+if errorlevel 1 echo "Date Variable NOT Number" & start %fileno%-Allotment.txt & set /p datevar=Enter Date Variable
 
-findstr /c:"input type=\"text\"" %fileno%-ReprintAppt.txt > %fileno%-otpvar.txt
+findstr /c:"input type=\"text\"" %fileno%-Allotment.txt > %fileno%-otpvar.txt
 FOR /F "usebackq tokens=5" %%n IN (%fileno%-otpvar.txt) DO SET otpvar=%%n
 set otpvar=%otpvar:~6,6%
 echo %otpvar%| findstr /r "^[0-9]*$"
-if errorlevel 1 echo "OTP Variable NOT Number" & start %fileno%-ReprintAppt.txt & set /p otpvar=Enter OTP Variable
+if errorlevel 1 echo "OTP Variable NOT Number" & start %fileno%-Allotment.txt & set /p otpvar=Enter OTP Variable
 
 echo ################################################ >> %fileno%-report.txt
 echo "%datevar%=%aptdate%" >> %fileno%-report.txt
@@ -597,11 +614,6 @@ echo ################################################ >> %fileno%-report.txt
 
 goto final
 =============================================================================================
-
-
-:getFilesize
-set filesize=%~z1
-exit /b
 
 
 
@@ -618,8 +630,8 @@ echo curl version %cn%
 
 
 
-:Load_finalcaptcha
-TITLE IVAC %~n0  ##   STEP1 _ Load_finalcaptcha _ CN : %cn% _ RN:  %rn% _ TRY : %try%
+:Load_Allotment_captcha
+TITLE IVAC %~n0  ##   STEP1 _ Load_Allotment_captcha _ CN : %cn% _ RN:  %rn% _ TRY : %try%
 if /i %cap% EQU 4 SET ImgNum2=& goto curl_have_otp
 color A9 
 TITLE IVAC %~n0  ##   FINAL CAPTCHA _  OTP= %otp% _ Time= %otptime% _ TRY : %try% _ IP : %_rand% _ CN : %cn%
@@ -629,27 +641,27 @@ if /i %try% GTR 3 SET /a _rand=%RANDOM%*100/32768+151 & set /a try=0 & SET socks
 SET /a cn=%RANDOM%*8/32768
 echo curl version %cn%
 
-c:\curl\curl%cn% -v --trace-time -S -d -e --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --dump-header %fileno%-captcha_headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/captcha -o %fileno%-finalcaptcha.jpg -w "STEP FINAL CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
+c:\curl\curl%cn% -v --trace-time -S -d -e --connect-timeout 3 -m 5 -b %fileno%_cookie.txt -c %fileno%_cookie.txt --dump-header %fileno%-captcha_headers4.txt --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0" --referer http://indianvisa-bangladesh.nic.in/visa/Get_Appointment http://indianvisa-bangladesh.nic.in/visa/captcha -o %fileno%-allotmentcaptcha.jpg -w "STEP FINAL CAPTCHA Processing on %time% by %try% \n" 2>> %fileno%-report.txt
 
-if not exist "%fileno%-finalcaptcha.jpg" goto Load_finalcaptcha
+if not exist "%fileno%-allotmentcaptcha.jpg" goto Load_Allotment_captcha
 
 echo ********************** STEP FINAL CAPTCHA ****** Done by IP %_rand% _ time %time% _ SN:  %sn% _  TRY : %try% ************************* >> %fileno%-report.txt	
 
 findstr /L /O /N /C:"Content-Type: text/html" %fileno%-captcha_headers4.txt
-if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto Load_finalcaptcha 
+if /i %ERRORLEVEL% EQU 0 call :captchaenable & goto Load_Allotment_captcha 
 
 findstr /L /O /N /C:"Content-Type: image/jpeg" %fileno%-captcha_headers4.txt
 if /i %ERRORLEVEL% EQU 0 echo **********************   Error Level is %ERRORLEVEL% for ===STEP FINAL CAPTCHA=== & goto retrivecode 
 
 echo ********************** SERVER BUSY === Retry Again ===STEP FINAL CAPTCHA=== >> %fileno%-report.txt
-goto Load_finalcaptcha
+goto Load_Allotment_captcha
 
 
 :retrivecode 
 color A4
 echo ####### Start FC on time %time% ####### %ImgNum1% ####### %ImgNum2% ####### %ImgNum3% ####### %ImgNum% ####### >> %fileno%-report.txt
-c:\curl\curl -S -F "source_url=" -F "captcha_platform=" -F "action=Submit" -F "file=@%fileno%-finalcaptcha.jpg" http://122.144.12.253:8181/gsa_test.gsa -o %fileno%-code.txt
-FOR /F "tokens=11 delims=<\/>" %%m IN (%fileno%-code.txt) DO del %fileno%-finalcaptcha.jpg & SET ImgNum=%%m
+c:\curl\curl -S -F "source_url=" -F "captcha_platform=" -F "action=Submit" -F "file=@%fileno%-allotmentcaptcha.jpg" http://122.144.12.253:8181/gsa_test.gsa -o %fileno%-code.txt
+FOR /F "tokens=11 delims=<\/>" %%m IN (%fileno%-code.txt) DO del %fileno%-allotmentcaptcha.jpg & SET ImgNum=%%m
 echo ####### End FC on time %time% ####### %ImgNum1% ####### %ImgNum2% ####### %ImgNum3% ####### %ImgNum% ####### >> %fileno%-report.txt
 
 set try=0
@@ -661,9 +673,11 @@ echo ################################################ >> %fileno%-report.txt
 echo "fileno=%fileno%" >> %fileno%-report.txt
 echo "APPLNAME=%APPLNAME%" >> %fileno%-report.txt
 echo "PIA=%pia%" >> %fileno%-report.txt
-echo "%datevar%=%aptdate%" >> %fileno%-report.txt
-echo "%otpvar%=%otp%" >> %fileno%-report.txt
+echo "DATE=%aptdate%" >> %fileno%-report.txt
+echo "reotp=%otp%" >> %fileno%-report.txt
 echo "ImgNum=%ImgNum%" >> %fileno%-report.txt
+echo captcha Value = "%ImgNum%" & echo captcha Value = "%captcha%" >> %fileno%-report.txt
+echo Token Value = "%tokenvar%" & echo Token Value = "%tokenvar%" >> %fileno%-report.txt
 echo ################################################ >> %fileno%-report.txt
 
 
