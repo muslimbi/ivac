@@ -12,7 +12,7 @@ if /i %pia% EQU BGDD set /a apd=1%date:~7,2% - 100 + 7
 if /i %pia% EQU BGDC set /a apd=1%date:~7,2% - 100 + 7	
 if /i %pia% EQU BGDR set /a apd=1%date:~7,2% - 100 + 10	
 set aptdate=%apd%/%date:~4,2%/%date:~10,4%
-rem set aptdate=05/04/2017
+rem set aptdate=05/04/2018
 
 echo ##################################################################
 echo ++++ pia ============ %pia% ++++++++++ pia1 =========== %pia1%  
