@@ -1,0 +1,1231 @@
+
+<html ng-app="indian_visa">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Online Application | IVAC</title>
+
+
+    <meta name="keywords" content="indian visa, visa, online visa, visa payment, indian visa payment, indian embassy, bangladesh"/>
+    <meta name="description" content="Payment.ivacbd.com takes online payment of indian visa application. You can use your bank cards, mobile banking, online wallet to pay your indian visa application fees"/>
+    <meta name="subject" content="Online Payment">
+    <meta name="language" content="EN, BN">
+    <meta name="robots" content="index,follow" />
+    <meta name="topic" content="Online Payment, Ecommerce">
+    <meta name="Classification" content="Ecommerce">
+    <meta name="author" content="Shahnawaz Ahmed, sdaanish@live.com">
+    <meta name="designer" content="Shahnawaz Ahmed, sdaanish@live.com">
+    <meta name="copyright" content="Software Shop Limited, SSLWireless">
+    <meta name="owner" content="SSLWireless">
+    <meta name="url" content="http://www.sslwireless.com">
+    <meta name="directory" content="submission">
+    <meta name="category" content="Online payment">
+    <meta name="coverage" content="Bangladesh">
+    <meta name="distribution" content="Global">
+    <meta name="rating" content="General">
+    <meta name="revisit-after" content="1 month">
+
+    <link rel="stylesheet" href="https://payment.ivacbd.com/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://payment.ivacbd.com/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://payment.ivacbd.com/plugins/bootstrap/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://payment.ivacbd.com/plugins/stroke-7/style.css">
+
+    
+    <link rel="stylesheet" type="text/css" href="https://payment.ivacbd.com/plugins/window-modal/css/component.css" />
+    
+    <link rel="stylesheet" href="https://payment.ivacbd.com/css/main.css">
+    <link rel="stylesheet" href="https://payment.ivacbd.com/css/cyan.css">
+    <script src="https://payment.ivacbd.com/plugins/jquery/jquery.min.js"></script>
+    <script src="https://payment.ivacbd.com/plugins/angular/angular.min.js"></script>
+    </head>
+<body ng-controller="payment_application" class="ng-cloak">
+	<style>
+		.video_guide a {
+			font-size: 12px;
+			margin-bottom: 0;
+			color: #b5e498;
+			font-weight: normal;
+			text-transform: uppercase;
+			text-decoration: underline;
+		}
+	</style>
+    <div class="container-fluid">
+        <div class="row">
+
+            
+                
+            
+            <div class="col-md-12 d-none d-md-block fixed_bar">
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="https://payment.ivacbd.com/img/banner/banner_half.png" alt="" class="img-responsive">
+                    </div>
+                    <div class="col-md-7 text-right">
+                        <h3>{{ txt("having_check") }}
+							<a target="_blank" ng-if="lang=='en'" href="https://payment.ivacbd.com/contents/user_manual.html">{{ txt("user_manual") }}</a>
+							<a target="_blank" ng-if="lang!='en'" href="https://payment.ivacbd.com/contents/user_manual_bangla.html">{{ txt("user_manual") }} </a>
+							{{ txt("and") }} <a target="_blank" href="https://payment.ivacbd.com/contents/faq.html">{{ txt("faq") }}</a></h3>
+                    </div>
+                </div>
+            </div>
+
+                        <div class="col-md-3 ">
+                <div class="row">
+                    <div class="v_left" id="sticky-sidebar">
+                        <h2 class="text-center">{{ txt("lblInsTitle") }}</h2>
+						<h4 class="text-center video_guide"><a target="_blank" href="https://youtu.be/wsCPTU3giPo"><i class="fa fa-youtube"></i> {{ txt("video_guide") }}</a></h4>
+                        <div class="language_switcher text-center">
+                            <div class="btn-group btn-group-justified">
+                                <a href="#" data-ng-click="setLang('en')" ng-class="(lang == 'en') ? 'active': ''" class="btn btn-sm btn-dark btn-lang">English</a>
+                                <a href="#" data-ng-click="setLang('bn')"  ng-class="(lang == 'bn') ? 'active': ''" class="btn btn-sm btn-lang btn-dark">?????</a>
+                            </div>
+                        </div>
+                        
+                        <div ng-repeat="(key, notice) in allNotice">
+                            <p class="warning-text" ng-if="getWarning(key) == 1">* {{ getNotice(key) }}</p>
+
+                            <ul class="mb-0 nav navbar-nav directions" ng-if="getWarning(key) != 1">
+                                <li>{{ getNotice(key) }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                                        <div class="col-md-9 v_right" style="margin-top: 40px;">
+                                    <nav class="navbar navbar-light bg-faded v_nav">
+
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img src="https://payment.ivacbd.com/img/logo.png" class="d-inline-block align-top" alt="">
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <button ng-click="openQuery()" class="btn btn-info text-uppercase">
+                    <span ng-if="query_page">{{ txt("bckToPay") }}</span>
+                    <span ng-if="!query_page">{{ txt("QueryPay") }}</span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+    <div ng-hide="query_page" class="row justify-content-md-center">
+        <div class="col-md-10">
+
+
+            <div class="with-nav-tabs v_form">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#application" role="tab" ng-class="(active_form ==1) ? 'active' : ((editable1) ? '' : 'disabled')"  target="_self" ng-click="activeForm(1)">
+                            <i class="badge" ng-if="active_form == 1">{{ txt("lblOne") }}</i>
+                            <i class="fa fa-check" ng-if="active_form > 1"></i>
+                            {{ txt("lblTabMenu1") }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#personal" role="tab" ng-class="(active_form ==2) ? 'active' : ((editable2) ? '' : 'disabled')"  target="_self" ng-click="activeForm(2)">
+                            <i class="badge" ng-if="active_form <= 2">{{ txt("lblTwo") }}</i>
+                            <i class="fa fa-check" ng-if="active_form > 2"></i>
+                            {{ txt("lblTabMenu2") }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#overview" role="tab" ng-class="(active_form ==3) ? 'active' : ((editable3) ? '' : 'disabled')" target="_self" ng-click="activeForm(3)">
+                            <i class="badge" ng-if="active_form <= 3">{{ txt("lblThree") }}</i>
+                            <i class="fa fa-check" ng-if="active_form > 3"></i>
+                            {{ txt("lblTabMenu3") }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#payment" role="tab" ng-class="(active_form ==4) ? 'active' : 'disabled'" target="_self">
+                            <i class="badge">{{ txt("lblFour") }}</i> {{ txt("lblTabMenu4") }}
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <form ng-show="(active_form == 1) ? true : false" name="ApplicationForm" ng-submit="submitApplicationForm(ApplicationForm.$valid)" novalidate>
+                        <div ng-class="(active_form ==1) ? 'active' : ''" class="tab-pane active" id="application" role="tabpanel">
+                            <div class="col-md-12" style="padding-top: 20px;">
+
+                                <div class="form-group">
+                                    <label for="" class="text-uppercase">{{ txt("lblSelectHighCommission") }}</label>
+                                    <select class="form-control" name="highcom" id="highcom"
+                                            ng-options="c.c_name for c in centers track by c.id"
+                                            ng-model="payment[cindex].center" ng-change="analyzeCenter(payment[cindex].center)" required validation="alphanum|required">
+                                        <option value="" disabled>Select a High Commission</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group inner-addon right-addon">
+                                    <label class="text-uppercase" for="">{{ txt("lblInputWebFile") }} <span class="text-danger" style="font-weight: bold">({{ txt("lblMustFace7") }})</span></label>
+                                    <input type="text" name="web_id" oninput="this.value = this.value.toUpperCase()" class="form-control" ng-model="payment[cindex].web_id" ng-minlength="12" ng-maxlength="12"  maxlength="12" required="">
+                                    <a href="#" ng-click="showHint()" class="hint" data-toggle="tooltip" title="click to see where to find web file no"><i class="fa fa-question"></i></a>
+                                </div>
+                                <div class="form-group">
+                                    <label class="text-uppercase" for="">{{ txt("lblInputWebFileAgain") }} <small class="text-danger">*({{ txt("lblNoCopyPaste") }})</small></label>
+                                    <input type="text" name="web_id_repeat"  oninput="this.value = this.value.toUpperCase()" class="form-control" stopccp ng-model="payment[cindex].web_id_repeat"  ng-minlength="12" ng-maxlength="12" maxlength="12"  required="" ng-blur="analyzeWebfile(payment[cindex].web_id_repeat)" validation="match:payment[cindex].web_id,Web file number not match|required">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="" class="text-uppercase">{{ txt("lblInputSelectIvac") }}</label>
+                                    <select class="form-control" name="ivac" id="ivac"
+                                            ng-options="iv.ivac_name for iv in ivacs | filter:{center_info_id:selected_center} track by iv.id"
+                                            ng-model="payment[cindex].ivac" ng-change="analyzeIvac(payment[cindex].ivac)" required>
+                                        <option value="" disabled>Select an IVAC Center</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="" class="text-uppercase">{{ txt("lblInputVisaType") }}  <span class="text-danger" style="font-weight: bold">({{ txt("lblVisaTypeQueue") }})</span></label>
+
+                                            <select class="form-control" name="visa_type" id="ivac_visa_type"
+                                                    ng-options="signle_type.type_name for signle_type in visa_types"
+                                                    ng-model="payment[cindex].visa_type" required>
+                                                <option value="" disabled>Select a Visa Type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--                                    <div class="col-md-7">
+                                        <div class="form-group">
+                                            <label for="" class="text-uppercase">{{ txt("lblInputPassportNo") }}</label>
+                                            <input type="text" class="form-control" name="passport" ng-model="payment[cindex].passport" required="">
+                                        </div>
+                                    </div>-->
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="padding-bottom: 20px;">
+
+                                <div class="form-group">
+                                    <label for="" class="text-uppercase">{{ txt("lblInputAmount") }}</label>
+                                    
+                                    <p><strong>BDT {{ payment[cindex].amount }}</strong></p>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-sucess" ng-disabled="ApplicationForm.$invalid">{{ txt("lblSaveNext") }}</button>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </form>
+
+                    <form ng-show="(active_form == 2) ? true : false" name="PersonalForm" ng-submit="submitPersonalForm(PersonalForm.$valid)" novalidate>
+                        <div ng-class="(active_form ==2) ? 'active' : ''"  class="tab-pane" id="personal" role="tabpanel">
+                            <div class="col-md-12" style="padding-top: 20px; padding-bottom: 20px;">
+
+                                <div class="form-group">
+                                    <label class="text-uppercase" for="">{{ txt("lblInputName") }} <small class="text-danger">*({{ txt("lblRequired") }})</small></label>
+                                    <input type="text" class="form-control" name="name" ng-model="payment[cindex].name" required="" validation="min_len:3|max_len:30|required" minlength="3" maxlength="30">
+                                </div>
+                                <div class="form-group">
+                                    <label class="text-uppercase" for="">{{ txt("lblInputEmail") }}<small class="text-danger">*({{ txt("lblRequired") }})</small></label>
+                                    <input type="email" class="form-control" name="email" ng-model="payment[cindex].email" required="" validation="email|min_len:3|max_len:90" minlength="3" maxlength="50" ng-keyup="checkEmail(payment[cindex].email)" ng-readonly="!emailEditable">
+                                </div>
+                                <div class="form-group">
+                                    <label class="text-uppercase" for="">{{ txt("lblInputContactNo") }} <small class="text-danger">*({{ txt("lblRequired") }})</small></label>
+                                    <input type="text" class="form-control" name="phone"  id="person_contact_no" minlength="11" maxlength="13" ng-model="payment[cindex].phone" required="" pattern="\d*" ng-keyup="fixNumber(payment[cindex].phone)" ng-readonly="!phoneEditable">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <button class="btn btn-default" ng-disabled="PersonalForm.$invalid">{{ txt("lblSaveOverview") }}</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+
+                    <form name="OverViewForm" ng-show="(active_form == 3) ? true : false">
+                        <div ng-class="(active_form ==3) ? 'active' : ''"  class="tab-pane" id="overview" role="tabpanel">
+                            <div class="col-md-12" style="padding-top: 20px;">
+
+                                <uib-accordion close-others="oneAtATime">
+                                    <div uib-accordion-group class="mt-1" is-open="p.is_open" ng-repeat="p in payment track by $index" testing="p.web_id"  heading="{{ p }}" template-url="group-template.html">
+
+                                        <uib-accordion-heading>
+                                            <i class="badge badge-dark">Application #{{ $index + 1 }}</i> {{ p.web_id }} <small>({{ txt("btnExpandOrClose") }})</small>
+                                        </uib-accordion-heading>
+
+
+                                        <div class="col-md-12">
+                                            <div class="row">
+
+                                                <div class="col-md-4">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovWebID") }}</label>
+                                                        <p>{{ p.web_id }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovIvacCenter") }}</label>
+                                                        <p>{{ p.ivac.ivac_name }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovVisaType") }}</label>
+                                                        <p>{{ p.visa_type.type_name }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <!--                                                <div class="col-md-4">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovPassport") }}</label>
+                                                        <p>{{ p.passport }}</p>
+                                                    </div>
+                                                </div>-->
+
+                                                <div class="col-md-4">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovFees") }}</label>
+                                                        <p>BDT {{ p.amount }} </p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovName") }}</label>
+                                                        <p>{{ p.name }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovEmail") }}</label>
+                                                        <p>{{ p.email }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovContact") }}</label>
+                                                        <p>{{ p.phone }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4" style="display: none;">
+                                                    <div class="info_box">
+                                                        <label for="" class="text-uppercase">{{ txt("ovProbableAppointment") }}</label>
+                                                        <p ng-if="(p.appointment == '' || p.appointment == null) && (p.appointment_type == '' || p.appointment_type=='DATE')">N/A</p>
+                                                        <p ng-if="p.appointment != ''">{{ p.appointment }}</p>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="btn-group pull-right">
+                                                <button ng-click="editApplication(p)"  class="btn btn-sm btn-dark"><i class="fa fa-pencil"></i></button>
+                                                <button ng-click="removeApplication(p)"  class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+
+                                    </div>
+                                </uib-accordion>
+
+                                <div class="col-md-12" style="margin-top: 10px">
+                                    <div class="pull-right">
+                                        <button style="float: right; background-color: #ccc;" class="btn btn-light" ng-disabled="addDisabled" ng-click="addMoreFamilyApplication(payment,this)">{{ txt("AddMoreApplicationFamily") }}</button>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <p class="text-danger" style="float: right; ">
+                                    {{ txt("msgSameFamilyMember") }}
+                                </p>
+                                <div class="row" style="margin-top: 25px;">
+                                    <div class="col-md-7 mr-auto">
+
+                                        <div class="form-group" style="margin: 0">
+                                            <label for="tos_agree" style="display: block; margin-top: 25px;">
+                                                <input id="tos_agree" type="checkbox" ng-model="payment[0].confirm_tos">
+                                                {{ txt("tcAgree") }} <a target="_blank" href="https://payment.ivacbd.com/contents/tos.html">{{ txt("tcText") }}</a>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="padding-bottom: 20px;">
+                                <button class="btn btn-success" ng-click="CheckAndPayV2(payment)">{{ txt("conMovePay") }}</button>
+                                
+                            </div>
+                        </div>
+                    </form>
+
+                    <form name="PaymentForm" ng-show="(active_form == 4) ? true : false">
+                        <div ng-class="(active_form ==4) ? 'active' : ''" class="tab-pane" id="payment" role="tabpanel">
+                            <div class="col-md-12" style="box-shadow: 0 -1px 8px rgba(0,0,0,0.3),0 1px 8px rgba(0,0,0,0.3)">
+                                <div class="row">
+                                    <div class="col-md-7 pay_r">
+                                        <div class="payment_list">
+                                            <h3>{{ txt("payCard") }}</h3>
+                                            <ul class="nav nav-pills">
+                                                <li ng-repeat="p in payment_options.cards" ng-click="selectPayment(p,this)">
+                                                    <button class="hvr-pop" tooltip data-toggle="tooltip" title="{{ p.name }}">
+                                                        <img ng-src="{{ p.link }}" alt="{{ p.slug }}">
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="payment_list">
+                                            <h3>{{ txt("payInt") }}</h3>
+                                            <ul class="nav nav-pills">
+                                                <li ng-repeat="p in payment_options.internet" ng-click="selectPayment(p,this)">
+                                                    <button class="hvr-pop" tooltip data-toggle="tooltip" title="{{ p.name }}">
+                                                        <img ng-src="{{ p.link }}" alt="{{ p.slug }}">
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="payment_list">
+                                            <h3>{{ txt("payMob") }}</h3>
+                                            <ul class="nav nav-pills">
+                                                <li ng-repeat="p in payment_options.mobile" ng-click="selectPayment(p,this)">
+                                                    <button class="hvr-pop" tooltip data-toggle="tooltip" title="{{ p.name }}">
+                                                        <img ng-src="{{ p.link }}" alt="{{ p.slug }}">
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="payment_list">
+                                            <h3>{{ txt("payOth") }}</h3>
+                                            <ul class="nav nav-pills">
+                                                <li ng-repeat="p in payment_options.others" ng-click="selectPayment(p,this)">
+                                                    <button class="hvr-pop" tooltip data-toggle="tooltip" title="{{ p.name }}">
+                                                        <img ng-src="{{ p.link }}" alt="{{ p.slug }}">
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 pay_l">
+                                        <div class="row">
+                                            <div class="col-md-12 text-center" style="margin-bottom: 10px; margin-top: 15px">
+                                                <img style="max-width: 150px;" src="https://payment.ivacbd.com/img/sslcommerz.png" alt="" class="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="no_selected_payment_option" ng-if="selected_payment.slug == null">
+                                                    <h3>
+                                                        {{ txt("paySelectOption") }}
+                                                    </h3>
+                                                </div>
+                                                <div class="selected_payment_option"  ng-if="selected_payment.slug != null">
+                                                    <div class="sel_option">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <p class="option_name">{{ selected_payment.name }}</p>
+                                                                    </div>
+                                                                    <div class="col-md-6 text-right">
+                                                                        <img ng-src="{{ selected_payment.link }}" alt=""
+                                                                             class="img-responsive">
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <ul class="list-group" style="margin-top: 10px;">
+                                            <li class="list-group-item">
+                                                <strong>{{ txt("ovFees") }}</strong>: {{ payment_grand_total }} BDT
+                                            </li>
+                                            <li class="list-group-item">
+                                                <strong>{{ txt("payConvFee") }}:</strong> {{ payment_grand_charge }} BDT
+                                            </li>
+                                            <li class="list-group-item">
+                                                <strong>{{ txt("payPayable") }}: </strong> {{ payment_grand_with_charge }} BDT
+                                            </li>
+                                            <li class="list-group-item">
+
+                                                <div class="input-group">
+                                                    <strong>{{ txt("payPhone") }}:  </strong> &nbsp; {{ payment[0].phone }} &nbsp;&nbsp;
+                                                    <span class="badge badge-success" ng-if="showAppointData">{{ txt("verified") }}</span>
+                                                    <button class="btn btn-circle btn-sm  btn-primary" ng-disabled="sendOtpDisabled" type="button" ng-if="!showAppointData" ng-click="sendOtp()">
+                                                        <span ng-if="! verifyOtp">Send OTP</span>
+                                                        <span ng-if="verifyOtp">Resend OTP</span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item" ng-if="verifyOtp">
+                                                <strong>OTP : </strong>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control input-sm" ng-minlength="6" ng-maxlength="6" pattern="\d*" ng-readonly="showAppointData" ng-model="payment[0].otp" ng-keyup="checkVerifyBtn(payment[0].otp)">
+                                                    <button class="btn btn-default" type="button" id="button-addon1" ng-if="!showAppointData" ng-disabled="disableVerifyBtn" ng-click="verifyOtpClick()">Verify</button>
+                                                </div>
+
+                                            </li>
+
+                                        </ul>
+                                        <br><br>
+                                        <p class="text-danger" ng-if="!showAppointData">
+                                            {{ txt("msgVerifyOtp") }}
+                                        </p>
+                                        <p class="text-success" ng-if="showAppointData">
+                                            {{ txt("msgSuccessVerify") }}
+                                        </p>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="" class="text-uppercase">{{ txt("lblInputAppointDate") }}</label>
+
+                                                    <select class="form-control" name="appointment_date" ng-model="appointment_date" ng-change="switchAppointmentDate(payment[0],this)">
+                                                        <option value="" >Select a Appointment Date</option>
+                                                        <option  ng-repeat="slot in slotDates"  value="{{ slot }}">{{ slot }}</option>
+
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="" class="text-uppercase">{{ txt("lblInputAppointTime") }}</label>
+                                                    <input type="hidden" id="slot_id" name="slot_id" ng-model="payment[0].slot_id" value="">
+<!--                                                    <select name="appointment_time"  class="form-control" ng-model="payment[0].appointment_time" required >
+                                                        <option value="" >Select a Appointment Time</option>
+                                                        <option  ng-repeat="slot in slotTimes" ng-click="selectAppointmentTime(slot,payment[0],this)" value="{{ slot.hour }}">{{ slot.time_display }}</option>
+
+                                                    </select>-->
+
+                                                    <select class="form-control" name="appointment_time" ng-model="appointment_time" ng-change="switchAppointmentTime(payment[0],this)" required>
+                                                        <option value="" >Select a Appointment Time</option>
+                                                        <option  ng-repeat="slot in slotTimes"  value="{{ slot }}">{{ slot.time_display }}</option>
+                                                    </select>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 text-center" style="margin-top: 25px;">
+                                                <button class="btn btn-default" ng-disabled="selected_payment.slug == null || appointment_time == null || appointment_date == null " ng-click="payNowV2()">
+                                                    {{ txt("payNow") }}
+                                                </button>
+                                                <p class="text-danger">
+                                                    {{ txt("msgTrans5min") }}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="overlay" ng-if="loading">
+                    
+                        <div class="overly-content">
+                            <div class="sk-folding-cube">
+                                <div class="sk-cube1 sk-cube"></div>
+                                <div class="sk-cube2 sk-cube"></div>
+                                <div class="sk-cube4 sk-cube"></div>
+                                <div class="sk-cube3 sk-cube"></div>
+                            </div>
+                            
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 text-right" style="margin-bottom: 25px;">
+                    <img src="https://payment.ivacbd.com/img/sslwireless.png" alt="" class="img-responsive">
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div style="display: none;" class="hidden col-md-8 col-md-offset-2 v_form">
+
+            <div class="form-group">
+                <label for="">Your Web ref no</label>
+                <input type="text" class="form-control" ng-model="pay.web_id">
+            </div>
+            <!--            <div class="form-group">
+                <label for="">Passport number</label>
+                <input type="text" class="form-control" ng-model="pay.passport">
+            </div>-->
+            <div class="form-group">
+                <label for="">Name</label>
+                <input type="text" class="form-control" ng-model="pay.name">
+            </div>
+            <div class="form-group">
+                <label for="">Mobile Number</label>
+                <input type="text" class="form-control" ng-model="pay.phone">
+            </div>
+            <div class="form-group">
+                <label for="">Email Address</label>
+                <input type="text" class="form-control" ng-model="pay.email">
+            </div>
+            <div class="form-group">
+                <label for="">Amount</label>
+                <input type="text" class="form-control" ng-model="pay.amount">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-sucess" ng-click="payNow(pay)">Pay now</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div ng-show="query_page" class="row justify-content-md-center">
+        <div class="col-md-10">
+
+
+            <div class="with-nav-tabs v_form">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <form ng-hide="!isObjectEmpty(transaction)" name="QueryForm" ng-submit="submitQueryForm(QueryForm.$valid)" novalidate>
+                        <div class="tab-pane active" id="application" role="tabpanel">
+
+                            <h2 class="text-center" style="padding: 3% 0;">{{ txt("lblQueryStatus") }}</h2>
+                            <div class="ml-auto mr-auto col-md-6 text-center" style="padding-top: 20px; padding-bottom: 40px;">
+                                <div class="form-group">
+                                    <label class="text-uppercase" for="">{{ txt("lblInputWebFile") }}</label>
+                                    <input type="text" name="web_id" class="form-control input-sm" ng-model="query.web_id" ng-minlength="12" ng-maxlength="12"  maxlength="12" required="">
+                                </div>
+                                <!--                                <div class="form-group">
+                                                                    <label class="text-uppercase" for="">{{ txt("lblInputPassportNo") }}</label>
+                                                                    <input type="text" name="email" class="form-control input-sm" ng-model="query.passport" validation="required">
+                                                                </div>-->
+                                <div class="form-group">
+                                    <label for="">Verify you are human</label>
+                                    
+                                    <p><img src="https://payment.ivacbd.com/captcha/shahnawaz?sP8aqK1I" alt="captcha" class="captcha-img" data-refresh-config="shahnawaz"> <i style="display:inline-block;margin-left: 15px; cursor: pointer" class="fa fa-refresh" ng-click="refresh_captcha()"></i></p>
+                                    <input type="text" class="form-control" ng-model="query.query_captcha" placeholder="Enter the words written above">
+                                </div>
+                                <div class="form-group" style="margin-top: 20px;">
+                                    <button class="btn btn-info btn-primary" ng-disabled="QueryForm.$invalid">{{ txt("btnQueryStatus") }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="transaction_details" ng-show="!isObjectEmpty(transaction)">
+
+                        <div class="col-md-12" style="padding-top: 20px;">
+                            <h2 class="text-center">Your Payment Status</h2>
+                            <div class="row" style="padding-bottom: 25px;">
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovWebID") }}</label>
+                                        <p>{{ transaction.webfile_id }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovIvacCenter") }}</label>
+                                        <p>{{ transaction.ivac_name }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovVisaType") }}</label>
+                                        <p>{{ transaction.visa_type }}</p>
+                                    </div>
+                                </div>
+
+                                <!--                                <div class="col-md-4">
+                                                                    <div class="info_box">
+                                                                        <label for="" class="text-uppercase">{{ txt("ovPassport") }}</label>
+                                                                        <p>{{ transaction.passport_no }}</p>
+                                                                    </div>
+                                                                </div>-->
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovFees") }}</label>
+                                        <p>{{ transaction.final_amount }} BDT</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovName") }}</label>
+                                        <p>{{ transaction.name }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovEmail") }}</label>
+                                        <p>{{ transaction.email }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovContact") }}</label>
+                                        <p>{{ transaction.phone }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovAppointment") }}</label>
+                                        <p>{{ (transaction.appointment_type == 'DATE') ? transaction.appointment_date : transaction.appointment_type }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="info_box">
+                                        <label for="" class="text-uppercase">{{ txt("ovPayStatus") }}</label>
+                                        <p>
+                                            <span class="badge alert-success" ng-if="transaction.status == 'SUCCESS'">{{ txt("ovPaid") }}</span>
+                                            <span class="badge alert-danger" ng-if="transaction.status != 'SUCCESS'">{{ txt("ovUnPaid") }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-12 text-center" style="margin-top: 20px; margin-bottom:20px;" ng-if="transaction.status == 'SUCCESS'">
+                                    <a href="https://payment.ivacbd.com/invoice/download/{{ transaction.order_id }}" download="download" class="btn btn-dark text-uppercase"> <i class="fa fa-download"></i> {{ txt("btnDownPDF") }}</a>
+                                    <a href="https://payment.ivacbd.com/invoice/print/{{ transaction.order_id }}" class="btn btn-info text-uppercase"> <i class="fa fa-print"></i> {{ txt("btnPrintPDF") }}</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 text-right" style="margin-bottom: 25px;">
+                    <img src="https://payment.ivacbd.com/img/sslwireless.png" alt="" class="img-responsive">
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div style="display: none;" class="hidden col-md-8 col-md-offset-2 v_form">
+
+            <div class="form-group">
+                <label for="">Your Web ref no</label>
+                <input type="text" class="form-control" ng-model="pay.web_id">
+            </div>
+            <!--            <div class="form-group">
+                <label for="">Passport number</label>
+                <input type="text" class="form-control" ng-model="pay.passport">
+            </div>-->
+            <div class="form-group">
+                <label for="">Name</label>
+                <input type="text" class="form-control" ng-model="pay.name">
+            </div>
+            <div class="form-group">
+                <label for="">Mobile Number</label>
+                <input type="text" class="form-control" ng-model="pay.phone">
+            </div>
+            <div class="form-group">
+                <label for="">Email Address</label>
+                <input type="text" class="form-control" ng-model="pay.email">
+            </div>
+            <div class="form-group">
+                <label for="">Amount</label>
+                <input type="text" class="form-control" ng-model="pay.amount">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-sucess" ng-click="payNow(pay)">Pay now</button>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <div id="hintModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="https://payment.ivacbd.com/img/webfile.png" alt="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+                </div>
+
+
+        </div>
+
+
+
+
+
+
+
+        <!-- ALERT MODAL -->
+        <div modal-toggle id="full-danger" ng-class="alert_modal_class" class="modal-container modal-full-color modal-effect-1" style="perspective: none;z-index: 999999">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close modal-close"><span class="s7-close"></span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center"><span ng-class="alert_icon_class" class="modal-main-icon"></span>
+                        <h3 class="mb-4">{{ alert_modal_title }}</h3>
+                        <p ng-bind-html="alert_modal_content"></p>
+                        <div class="mt-6">
+                            <button type="button" ng-click="open_modal=0" class="btn btn-sm btn-space btn-secondary modal-close">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <script>
+        var allNotice = [{"bn":"\u0986\u09ae\u09b0\u09be \u09ac\u09b0\u09cd\u09a4\u09ae\u09be\u09a8\u09c7 \u09b8\u09c0\u09ae\u09bf\u09a4 \u0986\u0995\u09be\u09b0\u09c7 \u0986\u09ae\u09be\u09a6\u09c7\u09b0 \u09ad\u09bf\u09b8\u09be \u0995\u09be\u09b0\u09cd\u09af\u0995\u09cd\u09b0\u09ae \u09aa\u09b0\u09bf\u099a\u09be\u09b2\u09a8\u09be \u0995\u09b0\u099b\u09bf\u0964 \u0986\u099c\u0995\u09c7\u09b0 \u099c\u09a8\u09cd\u09af \u09ad\u09bf\u09b8\u09be \u0985\u09cd\u09af\u09be\u09aa\u09af\u09bc\u09c7\u09a8\u09cd\u099f\u09ae\u09c7\u09a8\u09cd\u099f\u0997\u09c1\u09b2\u09bf \u09aa\u09c2\u09b0\u09cd\u09a3\u0964 \u09aa\u09b0\u09ac\u09b0\u09cd\u09a4\u09c0 \u0985\u09cd\u09af\u09be\u09aa\u09af\u09bc\u09c7\u09a8\u09cd\u099f\u09ae\u09c7\u09a8\u09cd\u099f\u09c7\u09b0 \u09b8\u09ae\u09af\u09bc\u09b8\u09c2\u099a\u09c0 \u09e6\u09e9\/\u09e7\u09e6\/\u09e8\u09e6\u09e8\u09ea \u09a4\u09be\u09b0\u09bf\u0996\u09c7 \u09b8\u0995\u09be\u09b2 \u09e7\u09e6:\u09e6\u09e6 \u099f\u09be\u09af\u09bc \u0996\u09cb\u09b2\u09be \u09b9\u09ac\u09c7, \u09af\u09be \u09ae\u09c7\u09a1\u09bf\u0995\u09c7\u09b2, \u098f\u09a8\u09cd\u099f\u09cd\u09b0\u09bf \u09ad\u09bf\u09b8\u09be \u098f\u09ac\u0982 \u09b6\u09bf\u0995\u09cd\u09b7\u09be\u09b0\u09cd\u09a5\u09c0 \u09ac\u09bf\u09ad\u09be\u0997\u0997\u09c1\u09b2\u09bf\u09b0 \u099c\u09a8\u09cd\u09af \u09a8\u09bf\u09b0\u09cd\u09a7\u09be\u09b0\u09bf\u09a4, \u098f\u09ac\u0982 \u099c\u09ae\u09be \u09a6\u09c7\u0993\u09af\u09bc\u09be\u09b0 \u09a4\u09be\u09b0\u09bf\u0996 \u09e6\u09ec\/\u09e7\u09e6\/\u09e8\u09e6\u09e8\u09ea\u0964 \u0985\u09a8\u09c1\u0997\u09cd\u09b0\u09b9 \u0995\u09b0\u09c7 \u09b2\u0995\u09cd\u09b7\u09cd\u09af \u0995\u09b0\u09c1\u09a8 \u09af\u09c7, \u098f\u0987 \u09a4\u09bf\u09a8\u099f\u09bf \u09ac\u09bf\u09ad\u09be\u0997\u09c7\u09b0 \u09ac\u09be\u0987\u09b0\u09c7 \u0985\u09a8\u09cd\u09af\u09be\u09a8\u09cd\u09af \u09ad\u09bf\u09b8\u09be \u09ac\u09bf\u09ad\u09be\u0997\u09c7\u09b0 \u099c\u09a8\u09cd\u09af \u09b8\u09ae\u09af\u09bc\u09b8\u09c2\u099a\u09c0 \u09ac\u09b0\u09cd\u09a4\u09ae\u09be\u09a8\u09c7 \u0996\u09cb\u09b2\u09be \u09a8\u09c7\u0987\u0964","en":"WE ARE CURRENTLY RUNNING OUR VISA OPERATIONS ON A LIMITED SCALE. THE APPOINTMENTS FOR VISAS ARE CURRENTLY FULL TODAY. NEXT APPOINTMENT SLOTS WILL BE AVAILABLE ON 03\/10\/2024 AT 10:00 AM FOR APPOINTMENTS IN MEDICAL, ENTRY VISA \u0026 STUDENT CATEGORIES FOR SUBMISSION ON 06\/10\/2024. KINDLY NOTE THAT EXCEPT FOR THESE THREE CATEGORIES SLOTS IN OTHER VISA CATEGORIES ARE NOT OPEN AT THE MOMENT.","is_warning":1},{"bn":"\u0986\u09ac\u09c7\u09a6\u09a8\u0995\u09be\u09b0\u09c0\u09a6\u09c7\u09b0 \u0985\u09aa\u09cd\u09b0\u09af\u09bc\u09cb\u099c\u09a8\u09c0\u09af\u09bc \u09b8\u09be\u09b0\u09bf \u098f\u09a1\u09bc\u09be\u09a4\u09c7 \u098f\u09ac\u0982 \u0986\u09ac\u09c7\u09a6\u09a8 \u09a6\u09cd\u09b0\u09c1\u09a4 \u099c\u09ae\u09be \u09a6\u09c7\u09df\u09be\u09b0 \u099c\u09a8\u09cd\u09af \u09b6\u09c1\u09a7\u09c1\u09ae\u09be\u09a4\u09cd\u09b0 \u09ac\u09b0\u09be\u09a6\u09cd\u09a6\u0995\u09c3\u09a4 \u09b8\u09cd\u09b2\u099f\u09c7\u09b0 \u09b8\u09ae\u09df\u09c7 IVAC-\u098f \u0989\u09aa\u09b8\u09cd\u09a5\u09bf\u09a4 \u09b9\u0993\u09df\u09be\u09b0 \u099c\u09a8\u09cd\u09af \u0985\u09a8\u09c1\u09b0\u09cb\u09a7 \u0995\u09b0\u09be \u09b9\u099a\u09cd\u099b\u09c7","en":"APPLICANTS ARE REQUESTED TO REACH IVAC ONLY DURING THE SLOTS TIMINGS ALLOTTED TO AVOID UNNECESSARY QUEUES AND QUICK PROCESSING","is_warning":1},{"bn":"\u09ac\u09b0\u09cd\u09a4\u09ae\u09be\u09a8 \u09a0\u09bf\u0995\u09be\u09a8\u09be IVAC \u0995\u09c7\u09a8\u09cd\u09a6\u09cd\u09b0\u09c7\u09b0 \u0985\u09ac\u09b8\u09cd\u09a5\u09be\u09a8\u09c7\u09b0 \u09a0\u09bf\u0995\u09be\u09a8\u09be\u09b0 \u09b8\u09be\u09a5\u09c7 \u09a8\u09be \u09ae\u09bf\u09b2\u09b2\u09c7 \u0986\u09ac\u09c7\u09a6\u09a8\u0995\u09be\u09b0\u09c0 \u09a4\u09be\u09b0 \u09ad\u09bf\u09b8\u09be \u099c\u09ae\u09be \u09a6\u09bf\u09a4\u09c7 \u09aa\u09be\u09b0\u09ac\u09c7\u09a8 \u09a8\u09be","en":"THE APPLICANT CANNOT SUBMIT HIS OR HER VISA IF THE PRESENT ADDRESS DOES NOT MATCH THE ADDRESS OF THE IVAC CENTER LOCATION","is_warning":1},{"bn":"\u0986\u09aa\u09a8\u09be\u09b0 \u0986\u09ac\u09c7\u09a6\u09a8\u09c7\u09b0 \u099c\u09a8\u09cd\u09af \u09a8\u09bf\u09b0\u09cd\u09ac\u09be\u099a\u09bf\u09a4 \u09b9\u09be\u0987\u0995\u09ae\u09bf\u09b6\u09a8 \u09a8\u09bf\u09b0\u09cd\u09ac\u09be\u099a\u09a8 \u0995\u09b0\u09c1\u09a8\u0964","en":"PLEASE CHOOSE A HIGH COMMISSION OF YOUR APPLICATION","is_warning":0},{"bn":"\u0986\u09aa\u09a8\u09be\u09b0 \u0986\u09ac\u09c7\u09a6\u09a8\u09c7\u09b0 \u0993\u09df\u09c7\u09ac \u09ab\u09be\u0987\u09b2 \u09a8\u09be\u09ae\u09cd\u09ac\u09be\u09b0 \u09a6\u09bf\u09a8 (\u09e8\u09ac\u09be\u09b0)\u0964","en":"PUT WEB FILE NUMBER OF YOUR APPLICATION (2 TIMES)","is_warning":0},{"bn":"\u098f\u09b0\u09aa\u09b0 \u0986\u09aa\u09a8\u09be\u09b0 \u0986\u09ac\u09c7\u09a6\u09a8\u09c7\u09b0 \u099c\u09a8\u09cd\u09af \u09a8\u09bf\u09b0\u09cd\u09a7\u09be\u09b0\u09bf\u09a4 \u0986\u0987\u09ad\u09cd\u09af\u09be\u0995 \u09a8\u09bf\u09b0\u09cd\u09ac\u09be\u099a\u09a8 \u0995\u09b0\u09c1\u09a8\u0964","en":"THEN CHOOSE AN IVAC FOR YOUR APPLICATION","is_warning":0},{"bn":"\u0986\u09aa\u09a8\u09be\u09b0 \u09ad\u09bf\u09b8\u09be \u0986\u09ac\u09c7\u09a6\u09a8\u09c7\u09b0 \u099f\u09be\u0987\u09aa \u09a8\u09bf\u09b0\u09cd\u09ac\u09be\u099a\u09a8 \u0995\u09b0\u09c1\u09a8\u0964","en":"CHOOSE VISA TYPE OF YOUR APPLICATION","is_warning":0},{"bn":"\u0986\u09aa\u09a8\u09be\u09b0 \u09ac\u09cd\u09af\u0995\u09cd\u09a4\u09bf\u0997\u09a4 \u09a4\u09a5\u09cd\u09af \u09a6\u09bf\u09a8 (\u09af\u09c7\u09ae\u09a8\u0983 \u09a8\u09be\u09ae, \u09a8\u09be\u09ae\u09cd\u09ac\u09be\u09b0, \u0987\u09ae\u09c7\u0987\u09b2 \u0986\u0987\u09a1\u09bf)","en":"PROVIDE YOUR PERSONAL INFORMATION (Eg. NAME, CONTACT NUMBER, EMAIL)","is_warning":0},{"bn":"\u0986\u09aa\u09a8\u09be\u09b0 \u09aa\u09c7\u09ae\u09c7\u09a8\u09cd\u099f \u0987\u09a8\u09ad\u09cb\u09df\u09c7\u09b8 \u09aa\u09c7\u09a4\u09c7 \u0987\u09ae\u09c7\u0987\u09b2 \u09a0\u09bf\u0995\u09be\u09a8\u09be \u09a8\u09bf\u09b6\u09cd\u099a\u09bf\u09a4 \u0995\u09b0\u09c1\u09a8","en":"PLEASE CONFIRM YOUR EMAIL ADDRESS TO GET PAYMENT INVOICE","is_warning":1},{"bn":"\u09aa\u09c7\u09ae\u09c7\u09a8\u09cd\u099f \u0995\u09b0\u09c7 \u09a8\u09a4\u09c1\u09a8 \u0985\u09cd\u09af\u09be\u09aa\u09af\u09bc\u09c7\u09a8\u09cd\u099f\u09ae\u09c7\u09a8\u09cd\u099f\u09c7\u09b0 \u09a4\u09be\u09b0\u09bf\u0996\u09c7 \u09aa\u09be\u09b8\u09aa\u09cb\u09b0\u09cd\u099f \u098f\u09b0 \u09ae\u09c7\u09df\u09be\u09a6 \u09b8\u09b0\u09cd\u09ac\u09a8\u09bf\u09ae\u09cd\u09a8 \u09ec \u09ae\u09be\u09b8 \u09a5\u09be\u0995\u09a4\u09c7 \u09b9\u09ac\u09c7","en":"PASSPORT VALIDITY SHOULD BE AT LEAST 6 MONTHS ON THE DATE OF APPOINTMENT AND NOT ON THE DATE OF PAYMENT AND APPOINTMENT BOOKING.","is_warning":1}];
+    </script>
+
+
+
+
+
+<style>
+    .modal-content{
+        background-image: url("https://payment.ivacbd.com/img/bg-mobile.jpg");
+        background-repeat: no-repeat;
+        /*background-size: contain;*/
+        background-size: 600px;
+        color: #fff;
+        border-radius: 0;
+        width: 600px;
+        height: 600px;
+        border: 0;
+    }
+    .modal-body{
+        padding: 30px;
+    }
+    .modal-header{
+        border-bottom: 0;
+    }
+    .close {
+        float: right;
+        font-size: 40px;
+        color: #f54b00;
+        text-shadow: none;
+        position: absolute;
+        right: 15px;
+        line-height: 0;
+    }
+    .pop-title{
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+        font-size: 26px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .text-content{
+        text-align: center;
+        margin-top: 40px;
+        font-size: 16px;
+        color: #c8f1c7;
+    }
+    @media  screen and (max-width: 767px){
+        .modal-content{
+            width: 100%;
+            background-image: url(https://payment.ivacbd.com/img/bg-mobile.jpg);
+            background-size: 550px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+           /* background-size: contain;*/
+            background-color: #232323;
+        }
+    }
+</style>
+<!-- Modal -->
+<div class="modal fade" id="noticeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="top:10%">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </a>
+            </div>
+            <div class="modal-body">
+                <h1 class="text-center pop-title">Application fee change notice</h1>
+                <p class="text-content" style="font-size: 18px;">From 05<sup>th</sup> August 2018, Application fee will be BDT 800 for all IVAC Centers,</p>
+                <p class="text-center">For details please go to <a style="color:#fff; text-decoration: underline" target="_blank" href="http://www.ivacbd.com/%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE%E0%A6%A6%E0%A7%87%E0%A6%B6%E0%A6%BF-%E0%A6%9C%E0%A6%A8%E0%A7%8D%E0%A6%AF?ln=bn">IVACBD Website</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="instructModal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="top:10%">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </a>
+            </div>
+            <div class="modal-body">
+                <h1 class="text-center pop-title">{{ txt("insPopupMsgTitle") }}</h1>
+                <p class="text-content" style="font-size: 18px;">
+                    <li style="font-size: 18px; margin-top: 10px;">{{ txt("insPopupMsg1") }}</li>
+                    <li style="font-size: 18px; margin-top: 10px;">{{ txt("insPopupMsg1") }}</li>
+                    <li style="font-size: 18px; margin-top: 10px;">{{ txt("insPopupMsg1") }}</li>
+                </p>
+
+                <!--                <p class="text-content" style="font-size: 18px;">{{ txt("insPopupMsg1") }}</p>
+                                <p class="text-content" style="font-size: 18px;">{{ txt("insPopupMsg2") }}</p>
+                                <p class="text-content" style="font-size: 18px;">{{ txt("insPopupMsg3") }}</p>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="instructModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="top:10%"  data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-size:2000px; height: auto; background-image: none; background-color: #ffffff;">
+        <div class="modal-header" style="margin: 0px;">
+
+            <a href="#" class="close" id="emergencyNoticeCloseBtn" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </a>
+        </div>
+        <div class="modal-body">
+            <h3 style="text-align: center; color: red;"><strong>????? ?????????</strong></h3>
+
+
+            <p style="color: black;">
+                ??????? ??? ?????? ????
+                <br>
+                <br>
+                ?. ??????? ??? ????? ??????? ????? ???????? ?? ?? ? ?? ??????? ???????? ????, ?????? ???? ?? ??? ??? ??? ????? ?????? ???? ?? ?? ? ?? ??????? ???????? ???? ???? ??????? ??? ????? ??????? ????????? ????? ???????? ????? ????? ???????? ?? ???, ????? ????? ????? ???????????? ??? ????
+            </p>
+            <img src="https://payment.ivacbd.com/img/ivac_form_submit_4.jpg" width="100%" height="100%" alt="">
+            <p style="color: black;">
+                <br>
+            ?. ?????? ????? ????? (???? ????? ???????, ?????????/???????? ????????, ???????? ??????? ??? ??????/?????-????????? ????????? ???????????) ??-????????? ????? ???????? ????? ????? ??? ??????? ???? ????? ?????????????????? ???????? ???, ??????? ??? ??????? ???????????? ??????? ???? ??? ?????? ???? ??????????????? ???? ??????, ??????? ??? ????? ?????? ??? ??? ????? ??????????? ????????? ????/?????? (?-???? ????????????? ???? ?????) ???? ?-????? ?????? ??????? ??? ??? ?????? ??, ???? ?????????????????? ???? ??? ?????????? ???????????? ???????? ???????? ????????? ??? ??? ??? ?????????? ???????? ???? ??? ???? ?????? ?????? ?? ????????? ???? ?? ??, ???????? ??????? ??? ????
+                <br>
+                <br>
+                ??????? ????-?? ??????? ????????????? ???? (????, ?????????, ?????? ? ????)
+                – <a href="mailto:visahelp.dhaka@mea.gov.in">visahelp.dhaka@mea.gov.in</a>
+                <br>
+                <br>
+                ???????? ?????????-?? ??????? ????????????? ???? (?????????, ????????, ???????? ? ??????????????)
+                – <a href="mailto:ahc.chittagong@mea.gov.in">ahc.chittagong@mea.gov.in</a>
+                <br>
+                <br>
+                ???????? ???????-?? ??????? ????????????? ???? (???????, ?????, ?????????, ????? ? ????????)
+                – <a href="mailto:info.rajshahi@mea.gov.in">info.rajshahi@mea.gov.in</a>
+                <br>
+                <br>
+                ???????? ?????-?? ??????? ????????????? ???? (?????)
+                – <a href="mailto:ahc.khulna@mea.gov.in">ahc.khulna@mea.gov.in</a>
+                <br>
+                <br>
+                ???????? ?????-?? ??????? ????????????? ???? (????? ? ????????)
+                – <a href="mailto:ahc.sylhet@mea.gov.in">ahc.sylhet@mea.gov.in</a>
+                <br>
+                <br>
+                ?. ?????????????????? ????? ? ???? ???? ??????? ????????, ??????? ??? ??????? ???? ??, ????? ??? ???????? ???????? ??? ??????, ?? ??????? ?????????? ????? ??????????????? ????? ???????? ??? ????????? ???????? ???? ????? ???????????? ??? ????????? ?????? ???????????????? ????? ??? ?????
+            </p>
+            <hr color="orange" />
+            <p style="color:#000000;">
+                <strong>PLEASE NOTE</strong><br>
+                1. Please select IVAC as per your place of residence where you have been residing for the last six months. Please refer to the table below for selecting the  correct IVAC.
+                If your selection is not as per the jurisdiction table, your application shall be rejected.
+            </p>
+            <img src="https://payment.ivacbd.com/img/ivac_form_submit_1.jpg" width="100%" height="100%" alt="">
+            <p style="color:#000000;">
+                <br>
+                2. In case earlier appointments for submission of visa applications are required for <em>non-tourist visas</em> for genuine reasons (such as medical emergencies, participation at conferences/seminars, academic deadlines, and death/marriage-related family obligations), please complete the payment process and obtain an appointment first. Thereafter, please send an email to the concerned Mission/Post (email addresses below) with your request and supporting documents. Please note that requests for visa appointments will be evaluated purely on merit and will be subject to verification. Merely sending a request does not guarantee that the request will be accepted.<br>
+                For IVACs under HCI Dhaka (Dhaka, Satkhira, Barishal & Jessore) – <a href="mailto:visahelp.dhaka@mea.gov.in">visahelp.dhaka@mea.gov.in</a><br>
+                For IVACs under AHCI Chittagong (Chittagong, Comilla, Noakhali & Brahmanbaria) – <a href="mailto:ahc.chittagong@mea.gov.in">ahc.chittagong@mea.gov.in</a><br>
+                For IVACs under AHCI Rajshahi (Rajshahi, Bogura, Thakurgaon, Rangpur, & Kushtia) – <a href="mailto:info.rajshahi@mea.gov.in">info.rajshahi@mea.gov.in</a><br>
+                For IVACs under AHCI Khulna (Khulna) – <a href="mailto:ahc.khulna@mea.gov.in">ahc.khulna@mea.gov.in</a><br>
+                For IVACs under AHCI Sylhet (Sylhet & Mymensingh) – <a href="mailto:ahc.sylhet@mea.gov.in">ahc.sylhet@mea.gov.in</a><br>
+                3. While choosing the date and time of appointment, please ensure that the correct visa type is selected, matching with the purpose of visit. Selecting an incorrect category of visa may lead to rejection of application and cancellation of appointment without notice.
+            </p>
+
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    var basepath = "https://payment.ivacbd.com";
+    var csrf_token = "9mAbEkMCGT5Wl5Oza1tO7Md61HQtNm5IfAe5ZWzh";
+    var retry_again = false;
+    var last_order_id = "";
+        $("#emergencyNoticeCloseBtn").hide();
+    setTimeout(function() {
+        $("#emergencyNoticeCloseBtn").show();
+    }, 9000);
+</script>
+<script src="https://payment.ivacbd.com/plugins/bootstrap/js/popper.min.js"></script>
+<script src="https://payment.ivacbd.com/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://payment.ivacbd.com/plugins/bootstrap/js/bootstrap-datepicker.min.js"></script>
+<script src="https://payment.ivacbd.com/js/ui-bootstrap-tpls-3.0.2.min.js"></script>
+<script src="https://payment.ivacbd.com/plugins/recaptcha/angular-recaptcha.min.js"></script>
+<script src="https://payment.ivacbd.com/plugins/angular/angular-validation.min.js"></script>
+<script src="https://payment.ivacbd.com/plugins/angular/angular-translate.min.js"></script>
+<script src="https://payment.ivacbd.com/plugins/angular/angular-translate-loader-static-files.min.js"></script>
+<script src="https://payment.ivacbd.com/js/main.js"></script>
+<script src="https://payment.ivacbd.com/js/directive.js"></script>
+<script src="https://payment.ivacbd.com/js/factory.js"></script>
+<script src="https://payment.ivacbd.com/js/controller.js"></script>
+
+
+
+<script src="https://payment.ivacbd.com/plugins/window-modal/js/classie.js"></script>
+<script src="https://payment.ivacbd.com/plugins/window-modal/js/modalEffects.js"></script>
+
+<!-- for the blur effect -->
+<!-- by @derSchepp  https://github.com/Schepp/CSS-Filters-Polyfill -->
+<script>
+    // this is important for IEs
+    var polyfilter_scriptpath = "https://payment.ivacbd.com"+'/js/';
+</script>
+<script src="https://payment.ivacbd.com/plugins/window-modal/js/cssParser.js"></script>
+<script src="https://payment.ivacbd.com/plugins/window-modal/js/css-filters-polyfill.js"></script>
+
+
+<script>
+    $('#instructModal').modal('show');
+    function ezBSAlert (options) {
+        var deferredObject = $.Deferred();
+        var defaults = {
+            type: "alert", //alert, prompt,confirm
+            modalSize: 'modal-sm', //modal-sm, modal-lg
+            okButtonText: 'Ok',
+            cancelButtonText: 'Cancel',
+            yesButtonText: 'Yes',
+            noButtonText: 'No',
+            headerText: 'Attention',
+            messageText: 'Message',
+            alertType: 'default', //default, primary, success, info, warning, danger
+            inputFieldType: 'text', //could ask for number,email,etc
+        };
+        $.extend(defaults, options);
+
+        var _show = function(){
+            var headClass = "navbar-default";
+            switch (defaults.alertType) {
+                case "primary":
+                    headClass = "alert-primary";
+                    break;
+                case "success":
+                    headClass = "alert-success";
+                    break;
+                case "info":
+                    headClass = "alert-info";
+                    break;
+                case "warning":
+                    headClass = "alert-warning";
+                    break;
+                case "danger":
+                    headClass = "alert-danger";
+                    break;
+            }
+            $('BODY').append(
+                '<div id="ezAlerts" class="modal fade">' +
+                '<div class="modal-dialog" class="' + defaults.modalSize + '">' +
+                '<div class="modal-content">' +
+                '<div id="ezAlerts-header" class="modal-header ' + headClass + '">' +
+                '<button id="close-button" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' +
+                '<h4 id="ezAlerts-title" class="modal-title">Modal title</h4>' +
+                '</div>' +
+                '<div id="ezAlerts-body" class="modal-body">' +
+                '<div id="ezAlerts-message" ></div>' +
+                '</div>' +
+                '<div id="ezAlerts-footer" class="modal-footer">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            );
+
+            $('.modal-header').css({
+                'padding': '15px 15px',
+                '-webkit-border-top-left-radius': '5px',
+                '-webkit-border-top-right-radius': '5px',
+                '-moz-border-radius-topleft': '5px',
+                '-moz-border-radius-topright': '5px',
+                'border-top-left-radius': '5px',
+                'border-top-right-radius': '5px'
+            });
+
+            $('#ezAlerts-title').text(defaults.headerText);
+            $('#ezAlerts-message').html(defaults.messageText);
+
+            var keyb = false, backd = "static";
+            var calbackParam = "";
+            switch (defaults.type) {
+                case 'alert':
+                    keyb = true;
+                    backd = "true";
+                    $('#ezAlerts-footer').html('<button class="btn btn-' + defaults.alertType + '">' + defaults.okButtonText + '</button>').on('click', ".btn", function () {
+                        calbackParam = true;
+                        $('#ezAlerts').modal('hide');
+                    });
+                    break;
+                case 'confirm':
+                    var btnhtml = '<button id="ezok-btn" class="btn btn-primary">' + defaults.yesButtonText + '</button>';
+                    if (defaults.noButtonText && defaults.noButtonText.length > 0) {
+                        btnhtml += '<button id="ezclose-btn" class="btn btn-default">' + defaults.noButtonText + '</button>';
+                    }
+                    $('#ezAlerts-footer').html(btnhtml).on('click', 'button', function (e) {
+                        if (e.target.id === 'ezok-btn') {
+                            calbackParam = true;
+                            $('#ezAlerts').modal('hide');
+                        } else if (e.target.id === 'ezclose-btn') {
+                            calbackParam = false;
+                            $('#ezAlerts').modal('hide');
+                        }
+                    });
+                    break;
+                case 'prompt':
+                    $('#ezAlerts-message').html(defaults.messageText + '<br /><br /><div class="form-group"><input type="' + defaults.inputFieldType + '" class="form-control" id="prompt" /></div>');
+                    $('#ezAlerts-footer').html('<button class="btn btn-primary">' + defaults.okButtonText + '</button>').on('click', ".btn", function () {
+                        calbackParam = $('#prompt').val();
+                        $('#ezAlerts').modal('hide');
+                    });
+                    break;
+            }
+
+            $('#ezAlerts').modal({
+                show: false,
+                backdrop: backd,
+                keyboard: keyb
+            }).on('hidden.bs.modal', function (e) {
+                $('#ezAlerts').remove();
+                deferredObject.resolve(calbackParam);
+            }).on('shown.bs.modal', function (e) {
+                if ($('#prompt').length > 0) {
+                    $('#prompt').focus();
+                }
+            }).modal('show');
+        };
+
+        _show();
+        return deferredObject.promise();
+    }
+</script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle=tooltip]').hover(function(){
+            // on mouseenter
+            $(this).tooltip('show');
+        }, function(){
+            // on mouseleave
+            $(this).tooltip('hide');
+        });
+
+                        
+        var MultiNotificationShowed = localStorage.getItem("multi_notify");
+        if(MultiNotificationShowed == null) {
+            //$('#noticeModal').modal("show");
+            localStorage.setItem("multi_notify", "yes");
+        }
+    });
+
+
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-32646854-3"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-32646854-3');
+</script>
+<script type="text/ng-template" id="group-template.html">
+    <div class="card-header bg-info">
+        <h4 class="card-title" style="color:#fff;margin-bottom: 0;">
+            <a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading" style="color:#fff; font-size: 18px;">
+              <span uib-accordion-header ng-class="{'text-muted': isDisabled}">
+                {{heading.web_id}} <small>(Click here to expand or close)</small>
+              </span>
+            </a>
+            
+            
+            
+            
+            
+            
+        </h4>
+    </div>
+    <div class="card-collapse collapse" uib-collapse="!isOpen">
+        <div class="card-body" style="text-align: right" ng-transclude>
+
+        </div>
+    </div>
+</script>
+
+
+<div class="md-overlay"></div><!-- the overlay element -->
+    <script>
+        jQuery(document).ready(function ($) {
+            $('.nav-tabs').tab();
+        });
+    </script>
+    <script>
+        $(".disabled").click(function (e) {
+            e.preventDefault();
+            return false;
+        });
+
+        $('.datepicker').datepicker({
+            format: 'dd-mm-yyyy'
+        });
+        angular.element(document).ready(function ($http) {
+            var elem = angular.element(document.querySelector('[ng-app]'));
+            var $scope = angular.element(elem).scope();
+            $scope = $scope.$$childHead;
+            $scope.$apply(function() {
+                $scope.ivacs = [];
+                $scope.visa_types = [];
+                                    $scope.ivacs = JSON.parse('[{"id":2,"center_info_id":3,"ivac_name":"IVAC , RAJSHAHI","address":"Morium Ali Tower,Holding No-18, Plot No-557, 1ST Floor,Old Bilsimla, Greater Road,Barnali More, 1ST Floor, Ward No-10,Rajshahi.","prefix":"R","ceated_on":"2017-08-30 19:06:20","visa_fee":"800.00","is_delete":0,"created_at":null,"updated_at":null,"app_key":"IVACRAJSHAHI","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":3,"center_info_id":5,"ivac_name":"IVAC, KHULNA","address":"Dr. Motiar Rahman Tower,64, KDA Avenue,KDA Commercial Area,Banking Zone, Khulna-9100.","prefix":"D","ceated_on":"2017-08-30 19:07:08","visa_fee":"800.00","is_delete":0,"created_at":null,"updated_at":null,"app_key":"IVACKHULNA","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":4,"center_info_id":4,"ivac_name":"IVAC, SYLHET","address":"State Bank of India, Rahim Tower, Subhanighat Biswa Road,Sylhet 3100, Bangladesh.","prefix":"S","ceated_on":"2017-08-30 19:07:47","visa_fee":"800.00","is_delete":0,"created_at":null,"updated_at":null,"app_key":"IVACSYLHET","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":5,"center_info_id":2,"ivac_name":"IVAC, CHITTAGONG","address":"2111, Zakir Hossain Road, Habib Lane,Opposite Holy Crescent Hospital, Chittaghong","prefix":"C","ceated_on":"2017-08-30 19:08:37","visa_fee":"800.00","is_delete":0,"created_at":null,"updated_at":null,"app_key":"IVACCHITTAGONG","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":7,"center_info_id":3,"ivac_name":"IVAC, RANGPUR","address":"J B Sen Road,Opposite Ram Krishana Mission,Mahigonj, Rangpur","prefix":"R","ceated_on":"2017-08-30 19:13:18","visa_fee":"800.00","is_delete":0,"created_at":null,"updated_at":null,"app_key":"IVACRANGPUR","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":8,"center_info_id":4,"ivac_name":"IVAC, MYMENSINGH","address":"297\/1, Masakanda,1st Floor, Masakanda Bus Stand,Mymensingh","prefix":"S","ceated_on":"2017-08-30 19:13:59","visa_fee":"800.00","is_delete":0,"created_at":null,"updated_at":null,"app_key":"IVACMYMENSINGH","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":9,"center_info_id":1,"ivac_name":"IVAC, BARISAL","address":"North City Super Market,1st Floor, Barisal City Corporation,Amrita Lal Dey Road, Barisal","prefix":"D","ceated_on":"2017-08-30 19:14:58","visa_fee":"800.00","is_delete":0,"created_at":null,"updated_at":null,"app_key":"IVACBARISAL","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":12,"center_info_id":1,"ivac_name":"IVAC, JESSORE","address":"Indian Visa Application Center, Jessore, 210, Narail Road, Jessore, (Opposite of BADC seed storage godown suparibagan) ","prefix":"D","ceated_on":"2017-08-31 10:36:32","visa_fee":"800.00","is_delete":0,"created_at":null,"updated_at":null,"app_key":"IVACJESSORE","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":17,"center_info_id":1,"ivac_name":"IVAC, Dhaka (JFP)","address":"Jamuna Future Park","prefix":"D","ceated_on":"2018-07-12 11:58:00","visa_fee":"800.00","is_delete":0,"created_at":"2018-07-12 00:00:00","updated_at":null,"app_key":"IVACJFP","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":"(From <from> this IVAC fees will be <new_amount> BDT)","notification_text_popup":null},{"id":18,"center_info_id":3,"ivac_name":"IVAC, THAKURGAON","address":"Thakurgaon","prefix":"R","ceated_on":"2018-11-28 17:15:10","visa_fee":"800.00","is_delete":0,"created_at":"2018-11-28 11:15:25","updated_at":"2018-11-28 11:15:29","app_key":"IVACTHAKURGAON","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":null,"notification_text_popup":null},{"id":19,"center_info_id":3,"ivac_name":"IVAC, BOGURA","address":"Bogura","prefix":"R","ceated_on":"2018-11-28 11:17:46","visa_fee":"800.00","is_delete":0,"created_at":"2018-11-28 11:17:15","updated_at":null,"app_key":"IVACBOGURA","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":null,"notification_text_popup":null},{"id":20,"center_info_id":1,"ivac_name":"IVAC, SATKHIRA","address":"Satkhira","prefix":"D","ceated_on":"2018-11-28 11:19:06","visa_fee":"800.00","is_delete":0,"created_at":"2018-11-28 11:18:46","updated_at":null,"app_key":"IVACSATKHIRA","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":null,"notification_text_popup":null},{"id":21,"center_info_id":2,"ivac_name":"IVAC, CUMILLA","address":"Cumilla","prefix":"C","ceated_on":"2018-11-28 11:20:37","visa_fee":"800.00","is_delete":0,"created_at":"2018-11-28 11:20:17","updated_at":null,"app_key":"IVACCUMILLA","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":null,"notification_text_popup":null},{"id":22,"center_info_id":2,"ivac_name":"IVAC, NOAKHALI","address":"Noakhali","prefix":"C","ceated_on":"2018-11-28 11:22:29","visa_fee":"800.00","is_delete":0,"created_at":"2018-11-28 11:22:11","updated_at":null,"app_key":"IVACNOAKHALI","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":null,"notification_text_popup":null},{"id":23,"center_info_id":2,"ivac_name":"IVAC, BRAHMANBARIA","address":"Brahmanbaria","prefix":"C","ceated_on":"2018-11-28 11:23:46","visa_fee":"800.00","is_delete":0,"created_at":"2018-11-28 11:23:23","updated_at":null,"app_key":"IVACBRAHMANBARIA","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2018-08-05 00:00:00","notify_fees_from":"2018-07-29 04:54:32","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":null,"notification_text_popup":null},{"id":24,"center_info_id":3,"ivac_name":"IVAC, KUSHTIA","address":"Kushtia","prefix":"R","ceated_on":"2023-04-16 13:58:24","visa_fee":"800.00","is_delete":0,"created_at":"2023-04-16 13:58:24","updated_at":null,"app_key":"IVACKUSHTIA","contact_number":"","created_by":null,"charge":"3","new_visa_fee":"800.00","old_visa_fee":"800.00","new_fees_applied_from":"2023-04-16 13:58:24","notify_fees_from":"2023-04-16 13:58:24","max_notification_count":2,"allow_old_amount_until_new_date":2,"notification_text_beside_amount":null,"notification_text_popup":null}]');
+                                                    $scope.visa_types = JSON.parse('[{"id":3,"type_name":"TOURIST VISA","order":1,"is_active":1},{"id":13,"type_name":"MEDICAL\/MEDICAL ATTENDANT VISA","order":2,"is_active":1},{"id":6,"type_name":"ENTRY VISA","order":5,"is_active":1},{"id":2,"type_name":"STUDENT VISA","order":6,"is_active":1}]');
+                
+                    $scope.centers = [];
+                                    $scope.centers = JSON.parse('[{"id":1,"c_name":"Dhaka","prefix":"D","is_delete":0,"created_by":null,"created_at":null,"updated_at":null},{"id":2,"c_name":"Chittagong","prefix":"C","is_delete":0,"created_by":null,"created_at":null,"updated_at":null},{"id":3,"c_name":"Rajshahi","prefix":"R","is_delete":0,"created_by":null,"created_at":null,"updated_at":null},{"id":4,"c_name":"Sylhet","prefix":"S","is_delete":0,"created_by":null,"created_at":"2019-02-03 04:26:42","updated_at":"2019-02-03 04:26:42"},{"id":5,"c_name":"Khulna","prefix":"K","is_delete":0,"created_by":null,"created_at":"2019-06-24 12:08:36","updated_at":"2019-06-24 12:08:36"}]');
+                
+                    $scope.apiKey = "9mAbEkMCGT5Wl5Oza1tO7Md61HQtNm5IfAe5ZWzh";
+            });
+        });
+    </script>
+
+</body>
+</html>
